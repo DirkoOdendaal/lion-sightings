@@ -14,6 +14,18 @@ const routes: Routes = [
   {
     path: 'list',
     loadChildren: './list/list.module#ListPageModule'
+  },
+  {
+    path: 'register',
+    loadChildren: '../pages/signup/signup.module#SignUpPageModule'
+  },
+  {
+    path: 'login',
+    loadChildren: '../pages/signin/signin.module#SignInPageModule'
+  },
+  {
+    path: 'reset-password',
+    loadChildren: '../pages/reset-password/reset-password.module#ResetPasswordPageModule'
   }
 ];
 
