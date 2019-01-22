@@ -1,0 +1,70 @@
+<!--
+  Generated template for the Signup page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>
+        Signup
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  
+  <ion-content padding>
+    <form [formGroup]='signupForm' (ngSubmit)="signupUser()" novalidate>
+  
+      <ion-item>
+        <ion-label stacked>Firstname</ion-label>
+        <ion-input #firstname formControlName="firstname" required type="text" placeholder="Firstname" [class.invalid]="!signupForm.controls.firstname.valid && signupForm.controls.firstname.dirty">
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Surname</ion-label>
+        <ion-input #surname formControlName="surname" required type="text" placeholder="Surname" [class.invalid]="!signupForm.controls.surname.valid && signupForm.controls.surname.dirty">
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Email</ion-label>
+        <ion-input #email formControlName="email" required type="email" placeholder="Your email address" [class.invalid]="!signupForm.controls.email.valid && signupForm.controls.email.dirty">
+        </ion-input>
+      </ion-item>
+      <ion-item class="error-message" *ngIf="!signupForm.controls.email.valid  && signupForm.controls.email.dirty">
+        <p>Please enter a valid email.</p>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label stacked>Password</ion-label>
+        <ion-input (change)="checkSame()" #passwordCheck formControlName="passwordCheck" type="password" placeholder="Your password"
+          [class.invalid]="!signupForm.controls.passwordCheck.valid && signupForm.controls.passwordCheck.dirty">
+        </ion-input>
+      </ion-item>
+      <ion-item class="error-message" *ngIf="!signupForm.controls.passwordCheck.valid  && signupForm.controls.passwordCheck.dirty">
+        <p>Your password needs more than 6 characters.</p>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label stacked>Retype Password</ion-label>
+        <ion-input (change)="checkSame()" #password formControlName="password" type="password" placeholder="Retype password" [class.invalid]="!signupForm.controls.password.valid && signupForm.controls.password.dirty">
+        </ion-input>
+      </ion-item>
+      <ion-item class="error-message" *ngIf="!signupForm.controls.password.valid && signupForm.controls.password.dirty">
+        <p>Your password needs more than 6 characters.</p>
+      </ion-item>
+  
+      <ion-item class="error-message" *ngIf="showCheckSameError()">
+        <p>Your password does not match.</p>
+      </ion-item>
+  
+  
+      <ion-button type="submit">
+        Create an Account
+      </ion-button>
+    </form>
+  </ion-content>
+  

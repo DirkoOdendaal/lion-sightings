@@ -4,12 +4,16 @@ import { Routes, RouterModule } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'landing',
     pathMatch: 'full'
   },
   {
     path: 'home',
-    loadChildren: './home/home.module#HomePageModule'
+    loadChildren: './pages/home/home.module#HomePageModule'
+  },
+  {
+    path: 'landing',
+    loadChildren: './pages/landing/landing.module#LandingPageModule'
   },
   {
     path: 'list',
@@ -17,15 +21,35 @@ const routes: Routes = [
   },
   {
     path: 'register',
-    loadChildren: '../pages/signup/signup.module#SignUpPageModule'
+    loadChildren: './pages/signup/signup.module#SignUpPageModule'
   },
   {
     path: 'login',
-    loadChildren: '../pages/signin/signin.module#SignInPageModule'
+    loadChildren: './pages/signin/signin.module#SignInPageModule'
+  },
+  {
+    path: 'history',
+    loadChildren: './pages/view-sightings/view-sightings.module#ViewSightingsPageModule'
+  },
+  {
+    path: 'manage',
+    loadChildren: './pages/manage-users/manage-users.module#ManageUsersPageModule'
+  },
+  {
+    path: 'capture',
+    loadChildren: './pages/capture-sighting/capture-sighting.module#CaptureSightingPageModule'
+  },
+  {
+    path: 'all-sightings',
+    loadChildren: './pages/all-sightings/all-sightings.module#AllSightingsPageModule'
+  },
+  {
+    path: 'sighting',
+    loadChildren: './pages/sighting/sighting.module#SightingPageModule'
   },
   {
     path: 'reset-password',
-    loadChildren: '../pages/reset-password/reset-password.module#ResetPasswordPageModule'
+    loadChildren: './pages/reset-password/reset-password.module#ResetPasswordPageModule'
   }
 ];
 

@@ -1,0 +1,215 @@
+<!--
+  Generated template for the Signup page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            New sighting
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+    <form [formGroup]='sightingForm' (ngSubmit)="saveSighting()" novalidate>
+        <ion-item>
+            <ion-label position="stacked">Temperature</ion-label>
+            <ion-select formControlName="temperature" value="0" ok-text="Okay" cancel-text="Dismiss">
+                <ion-select-option value="-20">-20</ion-select-option>
+                <ion-select-option value="-19">-19</ion-select-option>
+                <ion-select-option value="-18">-18</ion-select-option>
+                <ion-select-option value="-17">-17</ion-select-option>
+                <ion-select-option value="-16">-16</ion-select-option>
+                <ion-select-option value="-15">-15</ion-select-option>
+                <ion-select-option value="-14">-14</ion-select-option>
+                <ion-select-option value="-13">-13</ion-select-option>
+                <ion-select-option value="-12">-12</ion-select-option>
+                <ion-select-option value="-11">-11</ion-select-option>
+                <ion-select-option value="-10">-10</ion-select-option>
+                <ion-select-option value="-9">-9</ion-select-option>
+                <ion-select-option value="-8">-8</ion-select-option>
+                <ion-select-option value="-7">-7</ion-select-option>
+                <ion-select-option value="-6">-6</ion-select-option>
+                <ion-select-option value="-5">-5</ion-select-option>
+                <ion-select-option value="-4">-4</ion-select-option>
+                <ion-select-option value="-3">-3</ion-select-option>
+                <ion-select-option value="-2">-2</ion-select-option>
+                <ion-select-option value="-1">-1</ion-select-option>
+                <ion-select-option value="0">0</ion-select-option>
+                <ion-select-option value="1">1</ion-select-option>
+                <ion-select-option value="2">2</ion-select-option>
+                <ion-select-option value="3">3</ion-select-option>
+                <ion-select-option value="4">4</ion-select-option>
+                <ion-select-option value="5">5</ion-select-option>
+                <ion-select-option value="6">6</ion-select-option>
+                <ion-select-option value="7">7</ion-select-option>
+                <ion-select-option value="8">8</ion-select-option>
+                <ion-select-option value="9">9</ion-select-option>
+                <ion-select-option value="10">10</ion-select-option>
+                <ion-select-option value="11">11</ion-select-option>
+                <ion-select-option value="12">12</ion-select-option>
+                <ion-select-option value="13">13</ion-select-option>
+                <ion-select-option value="14">14</ion-select-option>
+                <ion-select-option value="15">15</ion-select-option>
+                <ion-select-option value="16">16</ion-select-option>
+                <ion-select-option value="17">17</ion-select-option>
+                <ion-select-option value="18">18</ion-select-option>
+                <ion-select-option value="19">19</ion-select-option>
+                <ion-select-option value="20">20</ion-select-option>
+                <ion-select-option value="21">21</ion-select-option>
+                <ion-select-option value="22">22</ion-select-option>
+                <ion-select-option value="23">23</ion-select-option>
+                <ion-select-option value="24">24</ion-select-option>
+                <ion-select-option value="25">25</ion-select-option>
+                <ion-select-option value="26">26</ion-select-option>
+                <ion-select-option value="27">27</ion-select-option>
+                <ion-select-option value="28">28</ion-select-option>
+                <ion-select-option value="29">29</ion-select-option>
+                <ion-select-option value="30">30</ion-select-option>
+                <ion-select-option value="31">31</ion-select-option>
+                <ion-select-option value="32">32</ion-select-option>
+                <ion-select-option value="33">33</ion-select-option>
+                <ion-select-option value="34">34</ion-select-option>
+                <ion-select-option value="35">35</ion-select-option>
+                <ion-select-option value="36">36</ion-select-option>
+                <ion-select-option value="37">37</ion-select-option>
+                <ion-select-option value="38">38</ion-select-option>
+                <ion-select-option value="39">39</ion-select-option>
+                <ion-select-option value="40">40</ion-select-option>
+                <ion-select-option value="41">41</ion-select-option>
+                <ion-select-option value="42">42</ion-select-option>
+                <ion-select-option value="43">43</ion-select-option>
+                <ion-select-option value="44">44</ion-select-option>
+                <ion-select-option value="45">45</ion-select-option>
+                <ion-select-option value="46">46</ion-select-option>
+                <ion-select-option value="47">47</ion-select-option>
+                <ion-select-option value="48">48</ion-select-option>
+                <ion-select-option value="49">49</ion-select-option>
+                <ion-select-option value="50">50</ion-select-option>
+                <ion-select-option value="51">51</ion-select-option>
+                <ion-select-option value="52">52</ion-select-option>
+                <ion-select-option value="53">53</ion-select-option>
+                <ion-select-option value="54">54</ion-select-option>
+                <ion-select-option value="55">55</ion-select-option>
+                <ion-select-option value="56">56</ion-select-option>
+                <ion-select-option value="57">57</ion-select-option>
+                <ion-select-option value="58">58</ion-select-option>
+                <ion-select-option value="59">59</ion-select-option>
+                <ion-select-option value="60">60</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label position="stacked">Adult male</ion-label>
+            <ion-input #adultMale formControlName="adult_male" type="number" placeholder="0">
+            </ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="stacked">Adult female</ion-label>
+            <ion-input #adultFemale formControlName="adult_female" type="number" placeholder="0">
+            </ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="stacked">Sub adult male</ion-label>
+            <ion-input #subAdultMale formControlName="sub_adult_male" type="number" placeholder="0">
+            </ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="stacked">Sub adult female</ion-label>
+            <ion-input #subAdultFemale formControlName="sub_adult_female" type="number" placeholder="0">
+            </ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="stacked">Cub male</ion-label>
+            <ion-input #cubMale formControlName="cub_male" type="number" placeholder="0">
+            </ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="stacked">Cub female</ion-label>
+            <ion-input #cubFemale formControlName="cub_female" type="number" placeholder="0">
+            </ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="stacked">Cub unknown</ion-label>
+            <ion-input #cubUnknown formControlName="cub_unknown" type="number" placeholder="0">
+            </ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="stacked">Activity</ion-label>
+            <ion-select formControlName="activity" value="sleeping" ok-text="Okay" cancel-text="Dismiss">
+                <ion-select-option value="sleeping">Sleeping</ion-select-option>
+                <ion-select-option value="hunting">Hunting</ion-select-option>
+                <ion-select-option value="playing">Playing</ion-select-option>
+                <ion-select-option value="feeding">Feeding</ion-select-option>
+                <ion-select-option value="mating">Mating</ion-select-option>
+                <ion-select-option value="walking">Walking</ion-select-option>
+                <ion-select-option value="runing">Runing</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label position="stacked">Catch</ion-label>
+            <ion-toggle formControlName="catch" [checked]="catchValue" (ionChange)="catch()"></ion-toggle>
+        </ion-item>
+        <ion-item *ngIf="catchValue === true">
+            <ion-label position="stacked">Catch specy</ion-label>
+            <ion-input #catchSpecy formControlName="catch_specie" type="text" placeholder="Specy type">
+            </ion-input>
+        </ion-item>
+        <ion-item *ngIf="catchValue === true">
+            <ion-label position="stacked">Catch gender</ion-label>
+            <ion-select formControlName="catch_sex" value="male" ok-text="Okay" cancel-text="Dismiss">
+                <ion-select-option value="male">Male</ion-select-option>
+                <ion-select-option value="female">Female</ion-select-option>
+                <ion-select-option value="unknown">Unknown</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item *ngIf="catchValue === true">
+            <ion-label position="stacked">Catch age</ion-label>
+            <ion-select formControlName="catch_age" value="fresh" ok-text="Okay" cancel-text="Dismiss">
+                <ion-select-option value="fresh">Fresh</ion-select-option>
+                <ion-select-option value="recent">Recent</ion-select-option>
+                <ion-select-option value="one-day">1 Day</ion-select-option>
+                <ion-select-option value="two-day">2 Days</ion-select-option>
+                <ion-select-option value="one-week">1 Week</ion-select-option>
+                <ion-select-option value="week-plus">More than a week</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item *ngIf="catchValue === true">
+            <ion-label position="stacked">Carcass utilisation</ion-label>
+            <ion-select formControlName="carcass_utilization" value="10" ok-text="Okay" cancel-text="Dismiss">
+                <ion-select-option value="10">10%</ion-select-option>
+                <ion-select-option value="20">20%</ion-select-option>
+                <ion-select-option value="30">30%</ion-select-option>
+                <ion-select-option value="40">40%</ion-select-option>
+                <ion-select-option value="50">50%</ion-select-option>
+                <ion-select-option value="60">60%</ion-select-option>
+                <ion-select-option value="70">70%</ion-select-option>
+                <ion-select-option value="80">80%</ion-select-option>
+                <ion-select-option value="90">90%</ion-select-option>
+                <ion-select-option value="100">100%</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label position="stacked">Comments</ion-label>
+            <ion-textarea formControlName="comments"></ion-textarea>
+        </ion-item>
+        <ion-item>
+            <ion-label position="stacked">Images</ion-label>
+            <ion-button type="button" color="secondary" (click)="takePicture()">
+                    Take photo
+                 </ion-button>
+            <ion-button type="button" color="secondary" (click)="openImagePicker()">
+                   Attach photos
+                </ion-button>
+        </ion-item>
+
+        <ion-button type="submit">
+            Save sighting
+        </ion-button>
+    </form>
+</ion-content>

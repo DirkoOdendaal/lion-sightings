@@ -21,6 +21,11 @@ export class AppComponent {
       icon: 'list'
     },
     {
+      title: 'Landing',
+      url: '/landing',
+      icon: 'home'
+    },
+    {
       title: 'Sign up',
       url: '/register',
       icon: 'lock'
@@ -28,6 +33,21 @@ export class AppComponent {
     {
       title: 'Login',
       url: '/login',
+      icon: 'lock'
+    },
+    {
+      title: 'Capture',
+      url: '/capture',
+      icon: 'lock'
+    },
+    {
+      title: 'Manage users',
+      url: '/manage',
+      icon: 'lock'
+    },
+    {
+      title: 'View history',
+      url: '/history',
       icon: 'lock'
     }
   ];
