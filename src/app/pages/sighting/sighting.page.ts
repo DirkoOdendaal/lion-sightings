@@ -1,12 +1,6 @@
-
-import { NavController,
-    LoadingController,
-    AlertController } from '@ionic/angular';
-
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { AuthData } from '../../providers/auth.provider';
-import { EmailValidator } from '../../validators/email.validator';
+import { ActivatedRoute } from '@angular/router';
+import { Database } from '../../providers/database.provider';
 /**
  * Generated class for the Landing page.
  *
@@ -19,6 +13,19 @@ import { EmailValidator } from '../../validators/email.validator';
 })
 export class SightingPage {
 
-    constructor() {
+    private sighting_id;
+    private sighting;
+
+    constructor(public route: ActivatedRoute, private database: Database) {
+
+       this.route.params.subscribe(params => {
+            this.sighting_id = +params['id'];
+            console.log('passed value');
+            console.log(this.sighting_id);
+            console.log(+params['id']);
+            this.database.getSightingById(this.sighting_id).then(result => {
+                this.sighting = result;
+            });
+         });
     }
 }

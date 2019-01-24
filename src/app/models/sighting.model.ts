@@ -1,8 +1,10 @@
+import { Timestamp } from 'rxjs';
+
 export class Sighting  {
 
     sighting_number: number;
 
-    date_time: Date;
+    date_time?: Date;
 
     user: string;
 

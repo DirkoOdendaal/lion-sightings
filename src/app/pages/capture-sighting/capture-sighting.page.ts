@@ -14,6 +14,7 @@ import { Crop } from '@ionic-native/crop/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Sighting } from 'src/app/models';
+import { Timestamp } from 'rxjs';
 /**
  * Generated class for the Landing page.
  *
@@ -133,7 +134,6 @@ export class CaptureSightingPage {
                     newSighting = {
                         sighting_number: number,
                         user: '',
-                        date_time: new Date(),
                         latitude: latitude,
                         longitude: longitude,
                         adult_female: this.sightingForm.value.adult_female,

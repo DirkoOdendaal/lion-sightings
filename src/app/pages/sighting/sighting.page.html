@@ -1,0 +1,93 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>Back Button</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+            <ion-item>
+                <ion-label position="stacked">Temperature</ion-label>
+                <ion-input disabled [value]="sighting.temperature" type="text">                   
+                </ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Adult male</ion-label>
+                <ion-input disabled #adultMale [value]="sighting.adult_male" type="number" placeholder="0">
+                </ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Adult female</ion-label>
+                <ion-input #adultFemale disabled [value]="sighting.adult_female" type="number" placeholder="0">
+                </ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Sub adult male</ion-label>
+                <ion-input #subAdultMale disabled [value]="sighting.sub_adult_male" type="number" placeholder="0">
+                </ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Sub adult female</ion-label>
+                <ion-input #subAdultFemale disabled [value]="sighting.sub_adult_female" type="number" placeholder="0">
+                </ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Cub male</ion-label>
+                <ion-input #cubMale disabled [value]="sighting.cub_male" type="number" placeholder="0">
+                </ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Cub female</ion-label>
+                <ion-input #cubFemale disabled [value]="sighting.cub_female" type="number" placeholder="0">
+                </ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Cub unknown</ion-label>
+                <ion-input #cubUnknown disabled [value]="sighting.cub_unknown" type="number" placeholder="0">
+                </ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Activity</ion-label>
+                <ion-input [value]="sighting.activity" disabled type="text">
+                </ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Catch</ion-label>
+                <ion-input [value]="sighting.catch" disabled type="text"></ion-input>
+            </ion-item>
+            <ion-item *ngIf="sighting.catch === true">
+                <ion-label position="stacked">Catch specy</ion-label>
+                <ion-input #catchSpecy [value]="sighting.catch_specie" type="text" placeholder="Specy type">
+                </ion-input>
+            </ion-item>
+            <ion-item *ngIf="sighting.catch === true">
+                <ion-label position="stacked">Catch gender</ion-label>
+                <ion-input disabled [value]="sighting.catch_sex" type="text">
+                </ion-input>
+            </ion-item>
+            <ion-item *ngIf="sighting.catch === true">
+                <ion-label position="stacked">Catch age</ion-label>
+                <ion-input disabled [value]="sighting.catch_age" type="text">
+                </ion-input>
+            </ion-item>
+            <ion-item *ngIf="sighting.catch === true">
+                <ion-label position="stacked">Carcass utilisation</ion-label>
+                <ion-input disabled [value]="sighting.carcass_utilization" type="text">
+                </ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Comments</ion-label>
+                <ion-textarea disabled [value]="sighting.comments"></ion-textarea>
+            </ion-item>
+            <!-- <ion-item>
+                <ion-label position="stacked">Images</ion-label>
+                <ion-button type="button" color="secondary" (click)="takePicture()">
+                        Take photo
+                     </ion-button>
+                <ion-button type="button" color="secondary" (click)="openImagePicker()">
+                       Attach photos
+                    </ion-button>
+            </ion-item> -->
+    </ion-content>

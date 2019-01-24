@@ -1,0 +1,30 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            Sighting history
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-list *ngIf="sightings?.length > 0">
+        <ion-item *ngFor="let sighting of sightings">
+            <ion-icon name="filing" slot="start"></ion-icon>
+            {{sighting.date_time.toDate() | date: "dd-MM-yyyy HH:mm" }}
+            <div class="item-note" slot="end">
+                <ion-button (click)="viewDetail(sighting)">Details</ion-button>
+            </div>
+        </ion-item>
+    </ion-list>
+    <div *ngIf="!sightings?.length > 0">
+        <ion-item>
+            <p>No sightings captured yet.</p>
+        </ion-item>
+        <ion-button (click)="captureSighting()">
+            Capture new sighting
+        </ion-button>
+    </div>
+</ion-content>

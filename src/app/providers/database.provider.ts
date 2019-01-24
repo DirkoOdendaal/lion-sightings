@@ -11,7 +11,8 @@ export class Database {
         firstname: '',
         surname: '',
         email: '',
-        admin: false
+        admin: false,
+        allowed: false
     };
 
     private currentLoggedInUser = new BehaviorSubject<User>(this.currentLoggedInUserSource);
@@ -24,25 +25,22 @@ export class Database {
             firstname: createUser.firstname,
             surname: createUser.surname,
             email: createUser.email,
-            admin: createUser.admin
+            admin: createUser.admin,
+            allowed: createUser.allowed
         });
     }
 
     getUserDetails() {
 
         const userId = this.db.firestore.app.auth().currentUser.uid;
-        console.log('GetUserDetails');
-        console.log(userId);
         const result = this.db.collection('users').doc(userId).get().toPromise().then(function (snapshot) {
-
-            console.log('Result!!');
-            console.log(snapshot);
             const loggedInUser = {
                 user_id: snapshot.data().user_id,
                 firstname: snapshot.data().firstname,
                 surname: snapshot.data().surname,
                 email: snapshot.data().email,
-                admin: snapshot.data().admin
+                admin: snapshot.data().admin,
+                allowed: snapshot.data().allowed
             };
 
             return Promise.resolve(loggedInUser);
@@ -51,57 +49,84 @@ export class Database {
         return result;
     }
 
-    getUserName() {
-
-        const userId = this.db.firestore.app.auth().currentUser.uid;
-        let username = '';
-        this.db.collection('users').doc(userId).get().toPromise().then(function (snapshot) {
-            username = snapshot.data().firstname + ' ' + snapshot.data().surname;
+    getAllUsers(): Promise<any> {
+        const list = [];
+        return this.db.collection('users').get().toPromise().then(snapshot => {
+            snapshot.forEach(doc => {
+                    list.push(doc.data());
+            });
+            return Promise.resolve(list);
         });
-
-        return Promise.resolve(username);
     }
 
     getNextSightingNumber() {
         return this.db.collection('sightings').get().toPromise()
-        .then(snapshot => {
-            console.log('Sightings available');
-            console.log(snapshot);
-            return Promise.resolve(snapshot.size + 1); })
-        .catch(err => {
-            console.log('error location');
-            console.log(err);
-            return Promise.resolve(1); });
+            .then(snapshot => {
+                return Promise.resolve(snapshot.size + 1);
+            })
+            .catch(err => {
+                console.log('error location');
+                console.log(err);
+                return Promise.resolve(1);
+            });
     }
 
     addSighting(sighting: Sighting) {
-        this.getUserName().then(username => {
-            this.db.collection('sightings').doc(sighting.sighting_number.toString()).set({
-                sighting_number: sighting.sighting_number,
-                user: username,
-                date_time: new Date(),
-                temperature: sighting.temperature,
-                adult_male: sighting.adult_male,
-                adult_female: sighting.adult_female,
-                adult_id_list: sighting.adult_id_list,
-                sub_adult_male: sighting.sub_adult_male,
-                sub_adult_female: sighting.sub_adult_female,
-                sub_adult_id_list: sighting.sub_adult_id_list,
-                cub_male: sighting.cub_male,
-                cub_female: sighting.cub_female,
-                cub_unknown: sighting.cub_unknown,
-                cub_id_list: sighting.cub_id_list,
-                latitude:  sighting.latitude,
-                longitude:  sighting.longitude,
-                activity: sighting.activity,
-                catch: sighting.catch,
-                catch_species: sighting.catch_species,
-                catch_gender: sighting.catch_gender,
-                catch_age: sighting.catch_age,
-                carcass_utilization: sighting.carcass_utilization,
-                comments: sighting.comments,
-                photos: sighting.photos
+        this.db.collection('sightings').doc(sighting.sighting_number.toString()).set({
+            sighting_number: sighting.sighting_number,
+            user: this.db.firestore.app.auth().currentUser.uid,
+            date_time: new Date(),
+            temperature: sighting.temperature,
+            adult_male: sighting.adult_male,
+            adult_female: sighting.adult_female,
+            adult_id_list: sighting.adult_id_list,
+            sub_adult_male: sighting.sub_adult_male,
+            sub_adult_female: sighting.sub_adult_female,
+            sub_adult_id_list: sighting.sub_adult_id_list,
+            cub_male: sighting.cub_male,
+            cub_female: sighting.cub_female,
+            cub_unknown: sighting.cub_unknown,
+            cub_id_list: sighting.cub_id_list,
+            latitude: sighting.latitude,
+            longitude: sighting.longitude,
+            activity: sighting.activity,
+            catch: sighting.catch,
+            catch_species: sighting.catch_species,
+            catch_gender: sighting.catch_gender,
+            catch_age: sighting.catch_age,
+            carcass_utilization: sighting.carcass_utilization,
+            comments: sighting.comments,
+            photos: sighting.photos
+        });
+    }
+
+    getSightingsForAllUsers(): Promise<any> {
+        const list = [];
+        return this.db.collection('sightings').get().toPromise().then(snapshot => {
+            snapshot.forEach(doc => {
+                    list.push(doc.data());
             });
+            return Promise.resolve(list);
+        });
+    }
+
+    getSightingsForUser(): Promise<any> {
+        const list = [];
+        return this.db.collection('sightings').get().toPromise().then(snapshot => {
+            snapshot.forEach(doc => {
+                if (doc.data().user === this.db.firestore.app.auth().currentUser.uid) {
+                    list.push(doc.data());
+                }
+            });
+            return Promise.resolve(list);
+        });
+    }
+
+    getSightingById(id: number): Promise<any> {
+        const list = [];
+        console.log('getSightingById');
+        return this.db.collection('sightings').doc(id.toString()).get().toPromise().then(snapshot => {
+            return Promise.resolve(snapshot.data());
         });
     }
 }

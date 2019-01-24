@@ -51,7 +51,8 @@ export class SignUpPage {
                 firstname: this.signupForm.value.firstname,
                 surname: this.signupForm.value.surname,
                 email: this.signupForm.value.email,
-                admin: false
+                admin: false,
+                allowed: false
             };
 
 

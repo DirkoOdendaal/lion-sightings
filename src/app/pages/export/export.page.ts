@@ -1,9 +1,10 @@
 
-import { LoadingController, AlertController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
 
 import { Component } from '@angular/core';
+import { Sighting } from '../../models';
 import { Database } from '../../providers/database.provider';
-import { User } from '../../models';
+import { Router } from '@angular/router';
 /**
  * Generated class for the Landing page.
  *
@@ -11,19 +12,21 @@ import { User } from '../../models';
  * on Ionic pages and navigation.
  */
 @Component({
-  selector: 'page-manage-users',
-  templateUrl: 'manage-users.page.html',
+    selector: 'page-export',
+    templateUrl: 'export.page.html',
 })
-export class ManageUsersPage {
+export class ExportPage {
 
     loading: any;
     isLoading = true;
-    public users: Array<User> = [];
+    name = 'Tito';
+    email = 'tito@mail.com';
 
-    constructor(public database: Database, public loadingCtrl: LoadingController) {
+    public sightings: Array<Sighting> = [];
+    constructor(public database: Database, public router: Router, public loadingCtrl: LoadingController) {
         this.presentLoading();
-        this.database.getAllUsers().then(users => {
-            this.users = users;
+        this.database.getSightingsForAllUsers().then(sightings => {
+            this.sightings = sightings;
             this.dismisLoading();
         });
     }
@@ -43,11 +46,7 @@ export class ManageUsersPage {
         return await this.loadingCtrl.dismiss();
     }
 
-    allowUser(user: User) {
-
-    }
-
-    denyUser(user: User) {
+    exportAll() {
 
     }
 

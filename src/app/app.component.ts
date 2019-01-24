@@ -49,6 +49,11 @@ export class AppComponent {
       title: 'View history',
       url: '/history',
       icon: 'lock'
+    },
+    {
+      title: 'Export',
+      url: '/export',
+      icon: 'lock'
     }
   ];
 

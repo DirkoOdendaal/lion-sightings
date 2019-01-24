@@ -40,11 +40,19 @@ const routes: Routes = [
     loadChildren: './pages/capture-sighting/capture-sighting.module#CaptureSightingPageModule'
   },
   {
+    path: 'view-sightings',
+    loadChildren: './pages/view-sightings/view-sightings.module#ViewSightingsPageModule'
+  },
+  {
     path: 'all-sightings',
     loadChildren: './pages/all-sightings/all-sightings.module#AllSightingsPageModule'
   },
   {
-    path: 'sighting',
+    path: 'export',
+    loadChildren: './pages/export/export.module#ExportPageModule'
+  },
+  {
+    path: 'sighting/:id',
     loadChildren: './pages/sighting/sighting.module#SightingPageModule'
   },
   {

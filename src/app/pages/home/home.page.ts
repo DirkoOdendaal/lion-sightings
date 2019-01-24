@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Database } from '../../providers/database.provider';
 import { User } from '../../models';
+import { Router } from '@angular/router';
 /**
  * Generated class for the Landing page.
  *
@@ -17,10 +18,11 @@ export class HomePage {
         firstname: '',
         surname: '',
         email: '',
-        admin: false
+        admin: false,
+        allowed: false
       };
 
-    constructor(private database: Database) {
+    constructor(private database: Database, public router: Router) {
 
         this.database.getUserDetails().then(result => {
             this.user = {
@@ -28,8 +30,17 @@ export class HomePage {
               firstname: result.firstname,
               surname: result.surname,
               email: result.email,
-              admin: result.admin
+              admin: result.admin,
+              allowed: result.allowed
             };
           });
+    }
+
+    captureSighting() {
+      this.router.navigate(['/capture']);
+    }
+
+    viewMySightings() {
+      this.router.navigate(['/view-sightings']);
     }
 }

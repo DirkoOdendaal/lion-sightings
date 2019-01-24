@@ -48,7 +48,7 @@ export class SignInPage {
     }
 
     async dismisAndRoute() {
-        await this.loading.dismiss().then(() => {
+        return await this.loadingCtrl.dismiss().then(() => {
             this.router.navigate(['/home']);
        });
     }
@@ -75,5 +75,13 @@ export class SignInPage {
             ]
         });
         alert.present();
+    }
+
+    createNewAccount() {
+        this.router.navigate(['/signup']);
+    }
+
+    forgotPassword() {
+        this.router.navigate(['/reset-password']);
     }
 }

@@ -10,4 +10,6 @@ export class User  {
 
     admin: boolean;
 
+    allowed: boolean;
+
 }
