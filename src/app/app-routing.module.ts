@@ -56,6 +56,14 @@ const routes: Routes = [
     loadChildren: './pages/sighting/sighting.module#SightingPageModule'
   },
   {
+    path: 'all-ids',
+    loadChildren: './pages/all-ids/all-ids.module#AllIdsPageModule'
+  },
+  {
+    path: 'add-id',
+    loadChildren: './pages/id-add/id-add.module#IdAddPageModule'
+  },
+  {
     path: 'reset-password',
     loadChildren: './pages/reset-password/reset-password.module#ResetPasswordPageModule'
   }

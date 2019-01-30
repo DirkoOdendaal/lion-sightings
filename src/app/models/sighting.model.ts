@@ -1,10 +1,8 @@
-import { Timestamp } from 'rxjs';
-
 export class Sighting  {
 
     sighting_number: number;
 
-    date_time?: Date;
+    date_time?: string;
 
     user: string;
 
@@ -14,13 +12,9 @@ export class Sighting  {
 
     adult_female: number;
 
-    adult_id_list: Array<string>;
-
     sub_adult_male: number;
 
     sub_adult_female: number;
-
-    sub_adult_id_list: Array<string>;
 
     cub_male: number;
 
@@ -28,7 +22,7 @@ export class Sighting  {
 
     cub_unknown: number;
 
-    cub_id_list: Array<string>;
+    lion_id_list: Array<string>;
 
     latitude: number;
 

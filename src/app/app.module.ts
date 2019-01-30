@@ -10,6 +10,8 @@ import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { Crop } from '@ionic-native/crop/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { File } from '@ionic-native/file/ngx';
+import { ActionSheet } from '@ionic-native/action-sheet/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -44,6 +46,8 @@ import { Database } from './providers/database.provider';
     Crop,
     Camera,
     Geolocation,
+    File,
+    ActionSheet,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

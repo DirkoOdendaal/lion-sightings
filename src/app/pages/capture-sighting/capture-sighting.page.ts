@@ -31,6 +31,7 @@ export class CaptureSightingPage {
     loading: any;
     catchValue = false;
     photos = new Array<string>();
+    lionIdSelect = [];
 
     constructor(public formBuilder: FormBuilder,
         public loadingCtrl: LoadingController,
@@ -45,14 +46,12 @@ export class CaptureSightingPage {
             temperature: [0, Validators.compose([Validators.required])],
             adult_male: [0, Validators.compose([Validators.required])],
             adult_female: [0, Validators.compose([Validators.required])],
-            adult_ids: [''],
             sub_adult_male: [0, Validators.compose([Validators.required])],
             sub_adult_female: [0, Validators.compose([Validators.required])],
-            sub_adult_ids: [''],
             cub_male: [0, Validators.compose([Validators.required])],
             cub_female: [0, Validators.compose([Validators.required])],
             cub_unknown: [0, Validators.compose([Validators.required])],
-            cub_ids: [''],
+            lion_id_list: [''],
             activity: ['sleeping', Validators.compose([Validators.required])],
             catch: [false, Validators.compose([Validators.required])],
             catch_specie: [''],
@@ -60,6 +59,12 @@ export class CaptureSightingPage {
             catch_age: ['fresh'],
             carcass_utilization: ['10'],
             comments: ['']
+        });
+
+        this.database.getAllAvailableLionIds().then(result => {
+            result.forEach(element => {
+                this.lionIdSelect.push(element.id);
+            });
         });
     }
 
@@ -138,14 +143,12 @@ export class CaptureSightingPage {
                         longitude: longitude,
                         adult_female: this.sightingForm.value.adult_female,
                         adult_male: this.sightingForm.value.adult_male,
-                        adult_id_list: this.sightingForm.value.adult_ids,
                         sub_adult_female: this.sightingForm.value.sub_adult_female,
                         sub_adult_male: this.sightingForm.value.sub_adult_male,
-                        sub_adult_id_list: this.sightingForm.value.sub_adult_ids,
                         cub_female: this.sightingForm.value.cub_female,
                         cub_male: this.sightingForm.value.cub_male,
                         cub_unknown: this.sightingForm.value.cub_unknown,
-                        cub_id_list: this.sightingForm.value.cub_ids,
+                        lion_id_list: this.sightingForm.value.lion_id_list,
                         catch: this.sightingForm.value.catch,
                         catch_age: this.sightingForm.value.catch_age,
                         catch_gender: this.sightingForm.value.catch_sex,

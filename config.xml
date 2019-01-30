@@ -91,4 +91,6 @@
     <plugin name="cordova-plugin-geolocation" spec="4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To pinpoint the sighting location" />
     </plugin>
+    <plugin name="cordova-plugin-file" spec="6.0.1" />
+    <plugin name="cordova-plugin-actionsheet" spec="2.3.3" />
 </widget>

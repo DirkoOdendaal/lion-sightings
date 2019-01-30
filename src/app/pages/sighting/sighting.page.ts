@@ -20,9 +20,6 @@ export class SightingPage {
 
        this.route.params.subscribe(params => {
             this.sighting_id = +params['id'];
-            console.log('passed value');
-            console.log(this.sighting_id);
-            console.log(+params['id']);
             this.database.getSightingById(this.sighting_id).then(result => {
                 this.sighting = result;
             });

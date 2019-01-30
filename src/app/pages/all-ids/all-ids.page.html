@@ -1,0 +1,32 @@
+<ion-header>
+        <ion-toolbar>
+            <ion-buttons slot="start">
+                <ion-menu-button></ion-menu-button>
+            </ion-buttons>
+            <ion-title>
+                Lion ID's
+            </ion-title>
+            <ion-icon slot="end" name="add" (click)="addNew()"></ion-icon>
+        </ion-toolbar>
+    </ion-header>
+    <ion-content padding>
+            <ion-list *ngIf="lionIdsList?.length > 0">
+                    <ion-item *ngFor="let lionId of lionIdsList">
+                            <ion-icon name="paw" slot="start"></ion-icon>
+                        {{lionId.id}}  
+                        <!-- <ion-select id="" hidden [(ngModel)]="lionId.selected" value="died" ok-text="Okay" cancel-text="Dismiss">
+                                <ion-select-option value="died">Died</ion-select-option>
+                                <ion-select-option value="sold">Sold</ion-select-option>
+                                <ion-select-option value="lost">Lost</ion-select-option>
+                            </ion-select>                -->
+                        <div slot="end">
+                            <ion-button color="danger" size="small" (click)="showPopup(lionId)">Update</ion-button>
+                        </div>
+                    </ion-item>
+                </ion-list>
+                <div *ngIf="!lionIdsList?.length > 0">
+                    <ion-item>
+                        <p>No lion id's added yet.</p>
+                    </ion-item>
+                </div>
+            </ion-content>

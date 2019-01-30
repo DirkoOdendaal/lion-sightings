@@ -3,10 +3,21 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { User } from '../models/user.model';
 import { Database } from './database.provider';
 
-
 @Injectable()
 export class AuthData {
-  constructor( public auth: AngularFireAuth, public database: Database) { }
+  authState = null;
+
+  constructor(public auth: AngularFireAuth, public database: Database) {
+
+    auth.auth.onAuthStateChanged((state) => {
+      this.authState = state;
+    });
+  }
+
+  // Returns true if user is logged in
+  get authenticated(): boolean {
+    return this.authState !== null;
+  }
 
   /**
    * [loginUser We'll take an email and password and log the user into the firebase app]
@@ -15,7 +26,6 @@ export class AuthData {
    */
   loginUser(email: string, password: string): Promise<any> {
     return this.auth.auth.signInWithEmailAndPassword(email, password);
-
   }
 
   /**
@@ -53,4 +63,7 @@ export class AuthData {
     return this.auth.auth.signOut();
   }
 
+  isLoggedIn() {
+    return this.auth.auth.currentUser ? true : false;
+  }
 }

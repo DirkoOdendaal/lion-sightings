@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { User, Sighting } from '../models';
+import { User, Sighting, LionId } from '../models';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class Database {
 
     private currentLoggedInUser = new BehaviorSubject<User>(this.currentLoggedInUserSource);
 
-    constructor(public db: AngularFirestore) { }
+    constructor(public db: AngularFirestore) {}
 
     addUser(createUser: User) {
         this.db.collection('users').doc(createUser.user_id).set({
@@ -42,6 +42,7 @@ export class Database {
                 admin: snapshot.data().admin,
                 allowed: snapshot.data().allowed
             };
+            console.log(loggedInUser);
 
             return Promise.resolve(loggedInUser);
         });
@@ -75,18 +76,16 @@ export class Database {
         this.db.collection('sightings').doc(sighting.sighting_number.toString()).set({
             sighting_number: sighting.sighting_number,
             user: this.db.firestore.app.auth().currentUser.uid,
-            date_time: new Date(),
+            date_time: new Date().toString(),
             temperature: sighting.temperature,
             adult_male: sighting.adult_male,
             adult_female: sighting.adult_female,
-            adult_id_list: sighting.adult_id_list,
             sub_adult_male: sighting.sub_adult_male,
             sub_adult_female: sighting.sub_adult_female,
-            sub_adult_id_list: sighting.sub_adult_id_list,
             cub_male: sighting.cub_male,
             cub_female: sighting.cub_female,
             cub_unknown: sighting.cub_unknown,
-            cub_id_list: sighting.cub_id_list,
+            lion_id_list: sighting.lion_id_list,
             latitude: sighting.latitude,
             longitude: sighting.longitude,
             activity: sighting.activity,
@@ -127,6 +126,57 @@ export class Database {
         console.log('getSightingById');
         return this.db.collection('sightings').doc(id.toString()).get().toPromise().then(snapshot => {
             return Promise.resolve(snapshot.data());
+        });
+    }
+
+    addId(lionId: LionId): Promise<any> {
+        return this.db.collection('ids').doc(lionId.id).set({
+            id: lionId.id,
+            sold: lionId.sold,
+            died: lionId.died,
+            lost: lionId.lost,
+            date: new Date().toString()
+        }).then(response => {
+            return response;
+        });
+    }
+
+    updateId(lionId: LionId) {
+        this.db.collection('ids').doc(lionId.id).set({
+            id: lionId.id,
+            sold: lionId.sold,
+            died: lionId.died,
+            lost: lionId.lost,
+            date: new Date().toString()
+        });
+    }
+
+    getLionIdById(id: string): Promise<any> {
+        const list = [];
+        return this.db.collection('ids').doc(id).get().toPromise().then(snapshot => {
+            return Promise.resolve(snapshot.data());
+        });
+    }
+
+    getAllLionIds(): Promise<any> {
+        const list = [];
+        return this.db.collection('ids').get().toPromise().then(snapshot => {
+            snapshot.forEach(doc => {
+                    list.push(doc.data());
+            });
+            return Promise.resolve(list);
+        });
+    }
+
+    getAllAvailableLionIds(): Promise<any> {
+        const list = [];
+        return this.db.collection('ids').get().toPromise().then(snapshot => {
+            snapshot.forEach(doc => {
+                if (!doc.data().lost && !doc.data().dead && !doc.data().sold)  {
+                    list.push(doc.data());
+                }
+            });
+            return Promise.resolve(list);
         });
     }
 }

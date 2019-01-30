@@ -140,6 +140,12 @@
             </ion-input>
         </ion-item>
         <ion-item>
+            <ion-label position="stacked">Lion ids</ion-label>
+            <ion-select formControlName="lion_id_list" multiple value="0" ok-text="Okay" cancel-text="Dismiss">
+                <ion-select-option *ngFor="let lionId of lionIdSelect" value="{{lionId}}">{{lionId}}</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
             <ion-label position="stacked">Activity</ion-label>
             <ion-select formControlName="activity" value="sleeping" ok-text="Okay" cancel-text="Dismiss">
                 <ion-select-option value="sleeping">Sleeping</ion-select-option>

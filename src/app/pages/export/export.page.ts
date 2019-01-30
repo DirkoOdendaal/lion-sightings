@@ -20,7 +20,7 @@ export class ExportPage {
     loading: any;
     isLoading = true;
     name = 'Tito';
-    email = 'tito@mail.com';
+    emailAddress = 'tito@mail.com';
 
     public sightings: Array<Sighting> = [];
     constructor(public database: Database, public router: Router, public loadingCtrl: LoadingController) {
@@ -47,7 +47,6 @@ export class ExportPage {
     }
 
     exportAll() {
-
     }
 
 }

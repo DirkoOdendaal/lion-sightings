@@ -13,7 +13,7 @@
     <ion-list *ngIf="sightings?.length > 0">
         <ion-item *ngFor="let sighting of sightings">
             <ion-icon name="filing" slot="start"></ion-icon>
-            {{sighting.date_time.toDate() | date: "dd-MM-yyyy HH:mm" }}
+            {{sighting.date_time | date: "dd-MM-yyyy HH:mm" }}
             <div class="item-note" slot="end">
                 <ion-button (click)="viewDetail(sighting)">Details</ion-button>
             </div>
