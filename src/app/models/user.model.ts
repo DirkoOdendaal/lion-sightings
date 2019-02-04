@@ -12,4 +12,6 @@ export class User  {
 
     allowed: boolean;
 
+    denied: boolean;
+
 }

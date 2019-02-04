@@ -16,10 +16,6 @@ const routes: Routes = [
     loadChildren: './pages/landing/landing.module#LandingPageModule'
   },
   {
-    path: 'list',
-    loadChildren: './list/list.module#ListPageModule'
-  },
-  {
     path: 'register',
     loadChildren: './pages/signup/signup.module#SignUpPageModule'
   },
@@ -38,6 +34,10 @@ const routes: Routes = [
   {
     path: 'capture',
     loadChildren: './pages/capture-sighting/capture-sighting.module#CaptureSightingPageModule'
+  },
+  {
+    path: 'captured/:id',
+    loadChildren: './pages/captured/captured.module#CapturedPageModule'
   },
   {
     path: 'view-sightings',

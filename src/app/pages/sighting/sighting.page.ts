@@ -13,8 +13,8 @@ import { Database } from '../../providers/database.provider';
 })
 export class SightingPage {
 
-    private sighting_id;
-    private sighting;
+    public sighting_id;
+    public sighting;
 
     constructor(public route: ActivatedRoute, private database: Database) {
 

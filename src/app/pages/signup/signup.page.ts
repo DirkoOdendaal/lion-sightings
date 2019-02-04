@@ -22,6 +22,7 @@ export class SignUpPage {
     public signupForm;
     loading: any;
     passwordSame = true;
+    isLoading = true;
 
 
     constructor(public authData: AuthData,
@@ -44,29 +45,41 @@ export class SignUpPage {
      * If the form is invalid it will just log the form value, feel free to handle that as you like.
      */
     signupUser() {
+        this.presentLoading();
         if (!this.signupForm.valid) {
             console.log(this.signupForm.value);
+            this.dismisLoading();
         } else {
             const newUser: User = {
                 firstname: this.signupForm.value.firstname,
                 surname: this.signupForm.value.surname,
                 email: this.signupForm.value.email,
                 admin: false,
-                allowed: false
+                allowed: false,
+                denied: false
             };
 
 
             this.authData.signupUser(newUser, this.signupForm.value.password)
                 .then(() => {
-                    this.loading.dismiss();
-                }, error => {
-                    this.loading.dismiss().then(() => {
-                        this.alertPopUp(error);
-                    });
+                    this.dismisLoading();
                 });
-            this.loading = this.loadingCtrl.create();
-            this.loading.present();
         }
+    }
+
+    async presentLoading() {
+        this.loading = await this.loadingCtrl.create().then(a => {
+            a.present().then(() => {
+                if (!this.isLoading) {
+                    a.dismiss();
+                }
+            });
+        });
+    }
+
+    async dismisLoading() {
+        this.isLoading = false;
+        return await this.loadingCtrl.dismiss();
     }
 
     async alertPopUp(error) {

@@ -10,7 +10,7 @@
         <ion-list>
           <ion-menu-toggle auto-hide="false" *ngFor="let p of menu">
             <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
-              <ion-icon slot="start" [name]="p.icon"></ion-icon>
+              <ion-icon alt="icon" slot="start" [name]="p.icon"></ion-icon>
               <ion-label>
                 {{p.title}}
               </ion-label>
@@ -18,7 +18,7 @@
           </ion-menu-toggle>
           <ion-menu-toggle auto-hide="false" *ngIf="isLoggedIn()">
               <ion-item (click)="logout()">
-                <ion-icon slot="start" name="lock"></ion-icon>
+                <ion-icon alt="lock" slot="start" name="lock"></ion-icon>
                 <ion-label>
                   Logout
                 </ion-label>

@@ -14,15 +14,29 @@
                     <ion-card-header>
                         <ion-card-title>Hi {{user.firstname}}</ion-card-title>
                     </ion-card-header>
-                    <ion-card-content>
+                    <ion-card-content *ngIf="user.allowed === true">
                         
                         <p>You can add a new sighting or view your captured sightings.</p>
                     </ion-card-content>
+                    <ion-card-content *ngIf="user.allowed === false && user.denied === false">      
+                            <ion-text color="dark">                  
+                            <p>The research conductor has not granted your account access yet.</p>
+                            </ion-text>
+                            <ion-text color="danger">   
+                            <p>If you are not part of the research study, you will not get access to the APP.</p>
+                            </ion-text>
+                        </ion-card-content>
+                        <ion-card-content *ngIf="user.allowed === false && user.denied === true">      
+                            <ion-text color="danger">                  
+                            <p>Sorry, you have been rejected access to the application.</p>
+                            <p>Please talk to the research conductor if this is an mistake.</p>
+                            </ion-text>
+                        </ion-card-content>
                 </ion-card>
-                <ion-button (click)="captureSighting()">
+                <ion-button aria-label="Capture new sighting" type="button" *ngIf="user.allowed === true" (click)="captureSighting()">
                     Capture new sighting
                 </ion-button>
-                <ion-button (click)="viewMySightings()">
+                <ion-button type="button" aria-label="View my sightings" *ngIf="user.allowed === true" (click)="viewMySightings()">
                     View my sightings
                 </ion-button>
           </ion-content>

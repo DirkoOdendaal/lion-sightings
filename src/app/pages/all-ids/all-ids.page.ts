@@ -103,7 +103,7 @@ export class AllIdsPage {
 
     async showPopup(lionId: LionId) {
 
-        const buttonsList = [, , {
+        const buttonsList = [{
             text: 'Lost',
             role: '',
             handler: () => {

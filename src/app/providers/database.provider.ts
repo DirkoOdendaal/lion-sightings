@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { User, Sighting, LionId } from '../models';
 import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class Database {
@@ -12,12 +13,13 @@ export class Database {
         surname: '',
         email: '',
         admin: false,
-        allowed: false
+        allowed: false,
+        denied: false
     };
 
     private currentLoggedInUser = new BehaviorSubject<User>(this.currentLoggedInUserSource);
 
-    constructor(public db: AngularFirestore) {}
+    constructor(public db: AngularFirestore) { }
 
     addUser(createUser: User) {
         this.db.collection('users').doc(createUser.user_id).set({
@@ -26,8 +28,30 @@ export class Database {
             surname: createUser.surname,
             email: createUser.email,
             admin: createUser.admin,
-            allowed: createUser.allowed
+            allowed: createUser.allowed,
+            denied: createUser.denied
         });
+    }
+
+    updateUser(createUser: User) {
+        this.db.collection('users').doc(createUser.user_id).set({
+            user_id: createUser.user_id,
+            firstname: createUser.firstname,
+            surname: createUser.surname,
+            email: createUser.email,
+            admin: createUser.admin,
+            allowed: createUser.allowed,
+            denied: createUser.denied
+        });
+    }
+
+    userDetails() {
+        return this.db.collection('users').snapshotChanges().pipe(map(actions => {
+            return actions.map(action => {
+                const data = action.payload.doc.data() as User;
+                return data;
+            });
+        }));
     }
 
     getUserDetails() {
@@ -40,7 +64,8 @@ export class Database {
                 surname: snapshot.data().surname,
                 email: snapshot.data().email,
                 admin: snapshot.data().admin,
-                allowed: snapshot.data().allowed
+                allowed: snapshot.data().allowed,
+                denied: snapshot.data().denied
             };
             console.log(loggedInUser);
 
@@ -54,7 +79,9 @@ export class Database {
         const list = [];
         return this.db.collection('users').get().toPromise().then(snapshot => {
             snapshot.forEach(doc => {
+                if (!doc.data().admin) {
                     list.push(doc.data());
+                }
             });
             return Promise.resolve(list);
         });
@@ -73,7 +100,7 @@ export class Database {
     }
 
     addSighting(sighting: Sighting) {
-        this.db.collection('sightings').doc(sighting.sighting_number.toString()).set({
+        return this.db.collection('sightings').doc(sighting.sighting_number.toString()).set({
             sighting_number: sighting.sighting_number,
             user: this.db.firestore.app.auth().currentUser.uid,
             date_time: new Date().toString(),
@@ -96,6 +123,10 @@ export class Database {
             carcass_utilization: sighting.carcass_utilization,
             comments: sighting.comments,
             photos: sighting.photos
+        }).then(pass => {
+            return sighting.sighting_number.toString();
+        }).catch(err => {
+            console.log('Big problem!!', err);
         });
     }
 
@@ -103,7 +134,7 @@ export class Database {
         const list = [];
         return this.db.collection('sightings').get().toPromise().then(snapshot => {
             snapshot.forEach(doc => {
-                    list.push(doc.data());
+                list.push(doc.data());
             });
             return Promise.resolve(list);
         });
@@ -162,7 +193,7 @@ export class Database {
         const list = [];
         return this.db.collection('ids').get().toPromise().then(snapshot => {
             snapshot.forEach(doc => {
-                    list.push(doc.data());
+                list.push(doc.data());
             });
             return Promise.resolve(list);
         });
@@ -172,7 +203,7 @@ export class Database {
         const list = [];
         return this.db.collection('ids').get().toPromise().then(snapshot => {
             snapshot.forEach(doc => {
-                if (!doc.data().lost && !doc.data().dead && !doc.data().sold)  {
+                if (!doc.data().lost && !doc.data().dead && !doc.data().sold) {
                     list.push(doc.data());
                 }
             });

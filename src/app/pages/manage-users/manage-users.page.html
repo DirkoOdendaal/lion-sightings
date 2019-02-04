@@ -10,24 +10,35 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-list>
+    <ion-list *ngIf="users?.length > 0">
         <ion-card *ngFor="let user of users">
 
             <ion-card-content>
                 <ion-grid>
                     <ion-row>
                         <ion-col>
-                            <ion-icon name="contact"></ion-icon>
+                            <ion-icon alt="contact" name="contact"></ion-icon>
                         </ion-col>
                         <ion-col>
                             {{user.firstname}} {{user.surname}}
                         </ion-col>
                     </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <ion-text color="{{user.allowed === true ? 'secondary' : user.denied === true ? 'danger' : 'primary'}}">
+                                {{user.allowed === true ? 'Allowed' : user.denied === true ? 'Denied' : 'New user'}}
+                            </ion-text>
+                        </ion-col>
+                    </ion-row>
                 </ion-grid>
-                <br />
-                <ion-button slot="start" (click)="allowUser(user)">Allow</ion-button>
-                <ion-button slot="end" color="danger" (click)="denyUser(user)">Deny</ion-button>
+                <ion-button  aria-label="Allow" type="button" *ngIf="!user.allowed" slot="start" (click)="allowUser(user)">Allow</ion-button>
+                <ion-button  aria-label="Deny" type="button" *ngIf="!user.denied" slot="end" color="danger" (click)="denyUser(user)">Deny</ion-button>
             </ion-card-content>
         </ion-card>
     </ion-list>
+    <div *ngIf="users?.length === 0">
+        <ion-item>
+            <p>No users have registered yet.</p>
+        </ion-item>
+    </div>
 </ion-content>

@@ -1,12 +1,4 @@
-
-import { NavController,
-    LoadingController,
-    AlertController } from '@ionic/angular';
-
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-import { AuthData } from '../../providers/auth.provider';
-import { EmailValidator } from '../../validators/email.validator';
 /**
  * Generated class for the Landing page.
  *

@@ -23,6 +23,7 @@ import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 
 import { AuthData } from './providers/auth.provider';
 import { Database } from './providers/database.provider';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,7 +36,8 @@ import { Database } from './providers/database.provider';
     AngularFirestoreModule,
     AngularFireAuthModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     StatusBar,

@@ -1,6 +1,5 @@
 
 import {
-    NavController,
     LoadingController,
     AlertController
 } from '@ionic/angular';
@@ -8,13 +7,12 @@ import {
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Database } from '../../providers/database.provider';
-import { EmailValidator } from '../../validators/email.validator';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { Crop } from '@ionic-native/crop/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Sighting } from 'src/app/models';
-import { Timestamp } from 'rxjs';
+import { Router } from '@angular/router';
 /**
  * Generated class for the Landing page.
  *
@@ -32,10 +30,12 @@ export class CaptureSightingPage {
     catchValue = false;
     photos = new Array<string>();
     lionIdSelect = [];
+    isLoading = true;
 
     constructor(public formBuilder: FormBuilder,
         public loadingCtrl: LoadingController,
         public alertCtrl: AlertController,
+        public router: Router,
         public imagePicker: ImagePicker,
         public cropService: Crop,
         public camera: Camera,
@@ -121,7 +121,7 @@ export class CaptureSightingPage {
     }
 
     saveSighting() {
-
+        console.log('Saving!');
         let latitude = 0;
         let longitude = 0;
 
@@ -133,7 +133,7 @@ export class CaptureSightingPage {
             if (!this.sightingForm.valid) {
                 console.log(this.sightingForm.value);
             } else {
-                console.log('Form valid');
+                this.presentLoading();
                 let newSighting: Sighting;
                 this.database.getNextSightingNumber().then(number => {
                     newSighting = {
@@ -159,17 +159,33 @@ export class CaptureSightingPage {
                         photos: this.photos,
                         activity: this.sightingForm.value.activity
                     };
-
-                    this.database.addSighting(newSighting);
-                    this.loading.dismis();
+                    this.database.addSighting(newSighting).then(result => {
+                        this.dismisLoading();
+                        if (result) {
+                            this.router.navigate(['/captured/', result]);
+                        }
+                    });
                 });
-                this.loading = this.loadingCtrl.create();
-                this.loading.present();
             }
         }).catch((error) => {
             console.log('Error getting location', error);
         });
 
+    }
+
+    async presentLoading() {
+        this.loading = await this.loadingCtrl.create().then(a => {
+            a.present().then(() => {
+                if (!this.isLoading) {
+                    a.dismiss();
+                }
+            });
+        });
+    }
+
+    async dismisLoading() {
+        this.isLoading = false;
+        return await this.loadingCtrl.dismiss();
     }
 
     async alertPopUp(error) {

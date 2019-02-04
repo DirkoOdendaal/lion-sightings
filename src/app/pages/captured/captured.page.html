@@ -1,0 +1,30 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>
+            Captured
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>Congratulations!</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-text color="dark">
+                <p>You captured sighting number {{sighting_id}}</p>
+            </ion-text>
+
+        </ion-card-content>
+    </ion-card>
+    <ion-button aria-label="Capture new sighting" type="button" (click)="captureSighting()">
+        Capture new sighting
+    </ion-button>
+    <ion-button type="button" aria-label="View my sightings" (click)="viewMySightings()">
+        View my sightings
+    </ion-button>
+</ion-content>

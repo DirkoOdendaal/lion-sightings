@@ -1,23 +1,24 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 
-import { HomePage } from './home.page';
+import { CapturedPage } from './captured.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild([
       {
         path: '',
-        component: HomePage
+        component: CapturedPage
       }
     ])
   ],
-  declarations: [HomePage]
+  declarations: [CapturedPage]
 })
-export class HomePageAutoModule {}
+export class CapturedPageModule {}

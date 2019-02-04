@@ -20,12 +20,12 @@
                 <p>Hi {{name}}</p>
                 <p>All sightings will be exported to an Excel spreadsheet, where each sighting is a different sheet.</p>
                 <p>The spreadsheet will be sent to:</p>
-                <p><b>{{email}}</b></p>
+                <p><b>{{emailAddress}}</b></p>
                 <br />
-                <ion-button slot="start" (click)="exportAll()">Export all sightings</ion-button>                
+                <ion-button aria-label="Export all sightings" type="button" slot="start" (click)="exportAll()">Export all sightings</ion-button>                
             </ion-card-content>
         </ion-card>
-    <div *ngIf="!sightings?.length > 0">
+    <div *ngIf="sightings?.length === 0">
         <ion-item>
             <p>No sightings captured yet.</p>
         </ion-item>

@@ -1,0 +1,33 @@
+{
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/favicon.png",
+          "/index.html",
+          "/*.css",
+          "/vendor.*.js",
+          "/main.*.js",
+          "/polyfills.*.js",
+          "/runtime.*.js",
+          "/*.js",
+          "!/*-sw.js"
+        ]
+      }
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/**"
+        ]
+      }
+    }
+  ]
+}

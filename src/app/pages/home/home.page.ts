@@ -19,7 +19,8 @@ export class HomePage {
         surname: '',
         email: '',
         admin: false,
-        allowed: false
+        allowed: false,
+        denied: false
       };
 
     constructor(private database: Database, public router: Router) {
@@ -31,7 +32,8 @@ export class HomePage {
               surname: result.surname,
               email: result.email,
               admin: result.admin,
-              allowed: result.allowed
+              allowed: result.allowed,
+              denied: result.denied
             };
           });
     }

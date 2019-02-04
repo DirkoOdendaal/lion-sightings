@@ -26,6 +26,16 @@ export class ManageUsersPage {
             this.users = users;
             this.dismisLoading();
         });
+
+        this.database.userDetails().subscribe((change) => {
+            const updatedUsers = [];
+            change.forEach(user => {
+                if (!user.admin) {
+                    updatedUsers.push(user);
+                }
+            });
+            this.users = updatedUsers;
+        });
     }
 
     async presentLoading() {
@@ -44,11 +54,33 @@ export class ManageUsersPage {
     }
 
     allowUser(user: User) {
+        console.log(user);
+        const newUser: User = {
+            firstname: user.firstname,
+            surname: user.surname,
+            email: user.email,
+            admin: user.admin,
+            allowed: true,
+            denied: false,
+            user_id: user.user_id
+        };
 
+        this.database.updateUser(newUser);
     }
 
     denyUser(user: User) {
+        console.log(user);
+        const newUser: User = {
+            firstname: user.firstname,
+            surname: user.surname,
+            email: user.email,
+            admin: user.admin,
+            allowed: false,
+            denied: true,
+            user_id: user.user_id
+        };
 
+        this.database.updateUser(newUser);
     }
 
 }

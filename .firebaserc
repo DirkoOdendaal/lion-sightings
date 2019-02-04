@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "lion-sightings",
+    "lion-sightings-pwa": "lion-sightings"
+  }
+}

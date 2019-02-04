@@ -12,18 +12,18 @@
 <ion-content padding>
     <ion-list *ngIf="sightings?.length > 0">
         <ion-item *ngFor="let sighting of sightings">
-            <ion-icon name="filing" slot="start"></ion-icon>
+            <ion-icon alt="filing" name="filing" slot="start"></ion-icon>
             {{sighting.date_time | date: "dd-MM-yyyy HH:mm" }}
             <div class="item-note" slot="end">
-                <ion-button (click)="viewDetail(sighting)">Details</ion-button>
+                <ion-button aria-label="Details" type="button" (click)="viewDetail(sighting)">Details</ion-button>
             </div>
         </ion-item>
     </ion-list>
-    <div *ngIf="!sightings?.length > 0">
+    <div *ngIf="sightings?.length === 0">
         <ion-item>
             <p>No sightings captured yet.</p>
         </ion-item>
-        <ion-button (click)="captureSighting()">
+        <ion-button aria-label="Capture new sighting" type="button" (click)="captureSighting()">
             Capture new sighting
         </ion-button>
     </div>

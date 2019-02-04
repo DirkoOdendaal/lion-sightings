@@ -93,4 +93,10 @@
     </plugin>
     <plugin name="cordova-plugin-file" spec="6.0.1" />
     <plugin name="cordova-plugin-actionsheet" spec="2.3.3" />
+    <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
+        <string>Need camera access to take pictures</string>
+    </edit-config>
+    <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
+        <string>Need photo library access to get pictures from there</string>
+    </edit-config>
 </widget>
