@@ -77,7 +77,7 @@ export class Database {
     getUserDetails() {
 
         const userId = this.db.firestore.app.auth().currentUser.uid;
-        const result = this.db.collection('users').doc(userId).get().toPromise().then(function (snapshot) {
+        const result = this.db.collection('users').doc(userId).ref.get().then(function (snapshot) {
             const loggedInUser = {
                 user_id: snapshot.data().user_id,
                 firstname: snapshot.data().firstname,
@@ -96,7 +96,7 @@ export class Database {
 
     getAllUsers(): Promise<any> {
         const list = [];
-        return this.db.collection('users').get().toPromise().then(snapshot => {
+        return this.db.collection('users').ref.get().then(snapshot => {
             snapshot.forEach(doc => {
                 if (!doc.data().admin) {
                     list.push(doc.data());
@@ -107,7 +107,7 @@ export class Database {
     }
 
     getNextSightingNumber() {
-        return this.db.collection('sightings').get().toPromise()
+        return this.db.collection('sightings').ref.get()
             .then(snapshot => {
                 return Promise.resolve(snapshot.size + 1);
             })
@@ -151,7 +151,7 @@ export class Database {
 
     getSightingsForAllUsers(): Promise<any> {
         const list = [];
-        return this.db.collection('sightings').get().toPromise().then(snapshot => {
+        return this.db.collection('sightings').ref.orderBy('date_time').get().then(snapshot => {
             snapshot.forEach(doc => {
                 list.push(doc.data());
             });
@@ -161,7 +161,7 @@ export class Database {
 
     getSightingsForUser(): Promise<any> {
         const list = [];
-        return this.db.collection('sightings').get().toPromise().then(snapshot => {
+        return this.db.collection('sightings').ref.orderBy('date_time').get().then(snapshot => {
             snapshot.forEach(doc => {
                 if (doc.data().user === this.db.firestore.app.auth().currentUser.uid) {
                     list.push(doc.data());
@@ -173,7 +173,7 @@ export class Database {
 
     getSightingById(id: number): Promise<any> {
         const list = [];
-        return this.db.collection('sightings').doc(id.toString()).get().toPromise().then(snapshot => {
+        return this.db.collection('sightings').doc(id.toString()).ref.get().then(snapshot => {
             return Promise.resolve(snapshot.data());
         });
     }
@@ -202,14 +202,14 @@ export class Database {
 
     getLionIdById(id: string): Promise<any> {
         const list = [];
-        return this.db.collection('ids').doc(id).get().toPromise().then(snapshot => {
+        return this.db.collection('ids').doc(id).ref.get().then(snapshot => {
             return Promise.resolve(snapshot.data());
         });
     }
 
     getAllLionIds(): Promise<any> {
         const list = [];
-        return this.db.collection('ids').get().toPromise().then(snapshot => {
+        return this.db.collection('ids').ref.get().then(snapshot => {
             snapshot.forEach(doc => {
                 list.push(doc.data());
             });
@@ -219,7 +219,7 @@ export class Database {
 
     getAllAvailableLionIds(): Promise<any> {
         const list = [];
-        return this.db.collection('ids').get().toPromise().then(snapshot => {
+        return this.db.collection('ids').ref.get().then(snapshot => {
             snapshot.forEach(doc => {
                 if (!doc.data().lost && !doc.data().dead && !doc.data().sold) {
                     list.push(doc.data());

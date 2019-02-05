@@ -81,13 +81,13 @@
                 <ion-label position="stacked">Comments</ion-label>
                 <ion-textarea disabled [value]="sighting.comments"></ion-textarea>
             </ion-item>
-            <!-- <ion-item>
-                <ion-label position="stacked">Images</ion-label>
-                <ion-button aria-label="Take photo" type="button" color="secondary" (click)="takePicture()">
-                        Take photo
-                     </ion-button>
-                <ion-button aria-label="Attach photos" type="button" color="secondary" (click)="openImagePicker()">
-                       Attach photos
-                    </ion-button>
-            </ion-item> -->
+            <ion-grid>
+                    <ion-row>
+                        <ion-col col-3 col-md-3 col-xl-3 *ngFor="let photo of sighting.photos">
+                            <ion-thumbnail>
+                                <img [src]="photo" />
+                            </ion-thumbnail>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
     </ion-content>

@@ -106,37 +106,37 @@
         </ion-item>
         <ion-item>
             <ion-label position="stacked">Adult male</ion-label>
-            <ion-input #adultMale formControlName="adult_male" type="number" placeholder="0">
+            <ion-input #adultMale formControlName="adult_male" type="number" min="0" placeholder="0">
             </ion-input>
         </ion-item>
         <ion-item>
             <ion-label position="stacked">Adult female</ion-label>
-            <ion-input #adultFemale formControlName="adult_female" type="number" placeholder="0">
+            <ion-input #adultFemale formControlName="adult_female" min="0" type="number" placeholder="0">
             </ion-input>
         </ion-item>
         <ion-item>
             <ion-label position="stacked">Sub adult male</ion-label>
-            <ion-input #subAdultMale formControlName="sub_adult_male" type="number" placeholder="0">
+            <ion-input #subAdultMale formControlName="sub_adult_male" min="0" type="number" placeholder="0">
             </ion-input>
         </ion-item>
         <ion-item>
             <ion-label position="stacked">Sub adult female</ion-label>
-            <ion-input #subAdultFemale formControlName="sub_adult_female" type="number" placeholder="0">
+            <ion-input #subAdultFemale formControlName="sub_adult_female" min="0" type="number" placeholder="0">
             </ion-input>
         </ion-item>
         <ion-item>
             <ion-label position="stacked">Cub male</ion-label>
-            <ion-input #cubMale formControlName="cub_male" type="number" placeholder="0">
+            <ion-input #cubMale formControlName="cub_male" type="number" min="0" placeholder="0">
             </ion-input>
         </ion-item>
         <ion-item>
             <ion-label position="stacked">Cub female</ion-label>
-            <ion-input #cubFemale formControlName="cub_female" type="number" placeholder="0">
+            <ion-input #cubFemale formControlName="cub_female" type="number" min="0" placeholder="0">
             </ion-input>
         </ion-item>
         <ion-item>
             <ion-label position="stacked">Cub unknown</ion-label>
-            <ion-input #cubUnknown formControlName="cub_unknown" type="number" placeholder="0">
+            <ion-input #cubUnknown formControlName="cub_unknown" type="number" min="0" placeholder="0">
             </ion-input>
         </ion-item>
         <ion-item>
@@ -206,17 +206,36 @@
         </ion-item>
         <ion-item>
             <ion-label position="stacked">Images</ion-label>
-            <ion-button aria-label="Take photo" type="button" color="secondary" (click)="takePicture()">
+            <div>
+                <input class="inputfile inputfile-1" id="file-1" name="file-1[]" type="file" accept="image/*"
+                    capture="camera" (change)="uploadFiles($event)"/>
+                <label for="file-1"> <span>Take a photo</span></label>
+            </div>
+            <div>
+                <input class="inputfile inputfile-1" id="file-2" name="file-2[]" type="file" accept="image/*"
+                    capture="gallery" multiple (change)="uploadFiles($event)"/>
+                <label for="file-2"> <span>Attach photos</span></label>
+            </div>
+            <!-- <ion-button aria-label="Take photo" type="button" color="secondary" (click)="takePicture()">
                 Take photo
             </ion-button>
             <ion-button aria-label="Attach photos" type="button" color="secondary" (click)="openImagePicker()">
                 Attach photos
-            </ion-button>
+            </ion-button> -->
         </ion-item>
+        <ion-grid>
+            <ion-row>
+                <ion-col col-3 col-md-3 col-xl-3 *ngFor="let photo of imgDisplay">
+                    <ion-thumbnail>
+                        <img [src]="photo" />
+                    </ion-thumbnail>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
 
-            <ion-button expand="block" aria-label="Save sighting" type="submit">
-                Save sighting
-            </ion-button>
+        <ion-button expand="block" aria-label="Save sighting" type="submit">
+            Save sighting
+        </ion-button>
 
     </form>
 </ion-content>

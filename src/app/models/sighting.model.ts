@@ -42,5 +42,5 @@ export class Sighting  {
 
     comments?: string;
 
-    photos?: Array<string>;
+    photos?: string[];
 }

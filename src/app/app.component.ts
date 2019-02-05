@@ -54,8 +54,6 @@ export class AppComponent implements OnInit {
         });
       }
     });
-
-    // this.checkMenu();
   }
 
   ngOnInit() {

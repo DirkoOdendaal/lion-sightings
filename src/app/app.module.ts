@@ -19,10 +19,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AngularFireModule } from 'angularfire2';
 import { environment } from '../environments/environment';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireStorageModule } from 'angularfire2/storage';
 
 import { AuthData } from './providers/auth.provider';
 import { Database } from './providers/database.provider';
+import { StorageProvider } from './providers/storage.provider';
+
 import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
@@ -35,6 +38,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    AngularFireStorageModule,
     FormsModule,
     ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
@@ -44,6 +48,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     SplashScreen,
     AuthData,
     Database,
+    StorageProvider,
     ImagePicker,
     Crop,
     Camera,

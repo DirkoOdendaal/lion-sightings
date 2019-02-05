@@ -20,19 +20,24 @@
                             <ion-icon size="large" alt="contact" name="contact"></ion-icon>
                         </ion-col>
                         <ion-col>
-                            {{user.firstname}} {{user.surname}}
+                            <strong>{{user.firstname}} {{user.surname}}</strong>                           
                         </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col>
-                            <ion-text color="{{user.allowed === true ? 'secondary' : user.denied === true ? 'danger' : 'primary'}}">
-                                {{user.allowed === true ? 'Allowed' : user.denied === true ? 'Denied' : 'New user'}}
-                            </ion-text>
+                            <div text-center>
+                                <ion-text color="{{user.allowed === true ? 'secondary' : user.denied === true ? 'danger' : 'primary'}}">
+                                    {{user.allowed === true ? 'Allowed' : user.denied === true ? 'Denied' : 'New
+                                    user'}}
+                                </ion-text>
+                            </div>
                         </ion-col>
                     </ion-row>
                 </ion-grid>
-                <ion-button color="secondary" aria-label="Allow" type="button" *ngIf="!user.allowed" slot="start" (click)="allowUser(user)">Allow</ion-button>
-                <ion-button aria-label="Deny" type="button" *ngIf="!user.denied" slot="end" color="danger" (click)="denyUser(user)">Deny</ion-button>
+                <ion-button expand="block" color="secondary" aria-label="Allow" type="button" *ngIf="!user.allowed"
+                    slot="start" (click)="allowUser(user)">Allow</ion-button>
+                <ion-button expand="block" aria-label="Deny" type="button" *ngIf="!user.denied" slot="end" color="danger"
+                    (click)="denyUser(user)">Deny</ion-button>
             </ion-card-content>
         </ion-card>
     </ion-list>
