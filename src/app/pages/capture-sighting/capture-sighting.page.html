@@ -5,7 +5,7 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
@@ -154,7 +154,7 @@
                 <ion-select-option value="feeding">Feeding</ion-select-option>
                 <ion-select-option value="mating">Mating</ion-select-option>
                 <ion-select-option value="walking">Walking</ion-select-option>
-                <ion-select-option value="runing">Runing</ion-select-option>
+                <ion-select-option value="running">Running</ion-select-option>
             </ion-select>
         </ion-item>
         <ion-item>
@@ -162,8 +162,8 @@
             <ion-toggle formControlName="catch" [checked]="catchValue" (ionChange)="catch()"></ion-toggle>
         </ion-item>
         <ion-item *ngIf="catchValue === true">
-            <ion-label position="stacked">Catch specy</ion-label>
-            <ion-input #catchSpecy formControlName="catch_specie" type="text" placeholder="Specy type">
+            <ion-label position="stacked">Catch species</ion-label>
+            <ion-input #catchSpecy formControlName="catch_specie" type="text" placeholder="Species type">
             </ion-input>
         </ion-item>
         <ion-item *ngIf="catchValue === true">
