@@ -1,12 +1,12 @@
 <ion-header>
         <ion-toolbar color="primary">
             <ion-buttons slot="start">
-                <ion-menu-button></ion-menu-button>
+                <ion-menu-button color="light"></ion-menu-button>
             </ion-buttons>
             <ion-title>
                 Lion ID's
             </ion-title>
-            <ion-icon alt="add" slot="end" name="add" (click)="addNew()"></ion-icon>
+            <ion-icon alt="add" size="large" slot="end" name="add" (click)="addNew()"></ion-icon>
         </ion-toolbar>
     </ion-header>
     <ion-content padding>
@@ -20,7 +20,7 @@
                                 <ion-select-option value="lost">Lost</ion-select-option>
                             </ion-select>                -->
                         <div slot="end">
-                            <ion-button color="danger" aria-label="Update" size="small" type="button" (click)="showPopup(lionId)">Update</ion-button>
+                            <ion-button color="secondary" aria-label="Update" size="small" type="button" (click)="showPopup(lionId)">Update</ion-button>
                         </div>
                     </ion-item>
                 </ion-list>

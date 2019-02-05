@@ -7,7 +7,7 @@
 <ion-header>
     <ion-toolbar color="primary">
         <ion-buttons slot="start">
-            <ion-menu-button></ion-menu-button>
+            <ion-menu-button color="light"></ion-menu-button>
         </ion-buttons>
         <ion-title>
             Login
@@ -16,7 +16,7 @@
 </ion-header>
 
 
-<ion-content id="login">
+<ion-content id="login" padding>
 
     <form [formGroup]="loginForm" (ngSubmit)="loginUser()" novalidate>
         <!--divs-->
@@ -42,15 +42,27 @@
                     <p>Your password needs more than 6 characters.</p>
                 </ion-item>
 
-                <ion-button aria-label="Logon" type="submit">
+                <br>
+                <ion-button expand="block" aria-label="Logon" type="submit">
                     Login
                 </ion-button>
-                <ion-buttons slot="secondary">
-                    <a href="createNewAccount()">Create a new account</a>
-                </ion-buttons>
-                <ion-buttons slot="secondary">
-                    <a href="forgotPassword()">I forgot my password</a>
-                </ion-buttons>
+
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <div text-center>
+                                <a href="javascript:void()" (click)="createNewAccount()">Create a new account</a>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>
+                            <div text-center>
+                                <a href="javascript:void()" (click)="forgotPassword()">I forgot my password</a>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
             </div>
         </div>
 

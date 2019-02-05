@@ -1,7 +1,7 @@
 <ion-header>
     <ion-toolbar color="primary">
         <ion-buttons slot="start">
-            <ion-menu-button></ion-menu-button>
+            <ion-menu-button color="light"></ion-menu-button>
         </ion-buttons>
         <ion-title>
             Sighting history
@@ -15,7 +15,7 @@
             <ion-icon alt="filing" name="filing" slot="start"></ion-icon>
             {{sighting.date_time | date: "dd-MM-yyyy HH:mm" }}
             <div class="item-note" slot="end">
-                <ion-button aria-label="Details" type="button" (click)="viewDetail(sighting)">Details</ion-button>
+                <ion-button color="secondary" aria-label="Details" type="button" (click)="viewDetail(sighting)">Details</ion-button>
             </div>
         </ion-item>
     </ion-list>

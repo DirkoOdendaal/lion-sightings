@@ -78,7 +78,7 @@ export class SignInPage {
     }
 
     createNewAccount() {
-        this.router.navigate(['/signup']);
+        this.router.navigate(['/register']);
     }
 
     forgotPassword() {
