@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { User, Sighting, LionId } from '../models';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable()
@@ -52,6 +52,26 @@ export class Database {
                 return data;
             });
         }));
+    }
+
+    currentUser(): Observable<User> {
+        if (this.db.firestore.app.auth().currentUser) {
+            const userId = this.db.firestore.app.auth().currentUser.uid;
+            return this.db.collection('users').doc(userId).get().pipe(map(snapshot => {
+                const loggedInUser: User = {
+                    user_id: snapshot.data().user_id,
+                    firstname: snapshot.data().firstname,
+                    surname: snapshot.data().surname,
+                    email: snapshot.data().email,
+                    admin: snapshot.data().admin,
+                    allowed: snapshot.data().allowed,
+                    denied: snapshot.data().denied
+                };
+                return loggedInUser;
+            }));
+        } else {
+            return new Observable();
+        }
     }
 
     getUserDetails() {

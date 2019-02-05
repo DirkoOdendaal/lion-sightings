@@ -7,7 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AuthData } from './providers/auth.provider';
 import { Database } from './providers/database.provider';
 import { Router } from '@angular/router';
-
+import { User } from './models/user.model';
 import { get, set } from 'idb-keyval';
 
 @Component({
@@ -46,7 +46,16 @@ export class AppComponent implements OnInit {
     private toastController: ToastController
   ) {
     this.initializeApp();
-    this.checkMenu();
+
+    this.auth.auth.auth.onAuthStateChanged((state) => {
+      if (state != null && state.uid != null) {
+        this.database.currentUser().subscribe(user => {
+          this.checkMenu(user);
+        });
+      }
+    });
+
+    // this.checkMenu();
   }
 
   ngOnInit() {
@@ -72,25 +81,25 @@ export class AppComponent implements OnInit {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-      this.isLoggedIn();
+      this.statusBar.styleLightContent();
+      setTimeout(() => {
+        this.splashScreen.hide();
+      }, 1500);
     });
   }
 
   async getInstallBanner() {
-    return await get('isInstallBannerShown');
+    return await get('isInstallBannerShow');
   }
 
   setInstallBanner() {
-    set('isInstallBannerShown', true);
+    set('isInstallBannerShow', true);
   }
 
   async showIosInstallBanner() {
     const toast = await this.toastController.create({
       showCloseButton: true,
       closeButtonText: 'OK',
-      cssClass: 'custom-toast',
       position: 'bottom',
       message: `To install the app, tap "Share" icon below and select "Add to Home Screen".`,
     });
@@ -99,47 +108,41 @@ export class AppComponent implements OnInit {
   }
 
   isLoggedIn() {
-    if (!this.loggedIn && this.auth.authenticated) {
-      this.loggedIn = true;
-      this.checkMenu();
-    } else if (!this.auth.authenticated && this.loggedIn) {
-      this.loggedIn = false;
-      this.checkMenu();
-    }
-
-    // else if (!this.loggedIn && !this.auth.authenticated) {
-    //   this.checkMenu();
-    // }
     return this.auth.authenticated;
   }
 
-  checkMenu() {
+  checkMenu(loggedInUser?: User) {
+    console.log('Checking menu');
+    console.log(loggedInUser);
+    const newMenu = [];
     this.menu.splice(0, this.menu.length);
-    if (this.auth.authenticated) {
+    if (loggedInUser) {
       this.router.navigate(['/home']);
-      this.menu.push(
+      newMenu.push(
         {
           title: 'Home',
           url: '/home',
           icon: 'home'
-        },
-        {
-          title: 'Capture',
-          url: '/capture',
-          icon: 'lock'
-        },
-        {
-          title: 'My sightings',
-          url: '/view-sightings',
-          icon: 'lock'
         }
-
       );
+      if (loggedInUser.allowed === true) {
+        newMenu.push(
+          {
+            title: 'Capture',
+            url: '/capture',
+            icon: 'lock'
+          },
+          {
+            title: 'My sightings',
+            url: '/view-sightings',
+            icon: 'lock'
+          }
 
-      if (this.database.getUserDetails().then(user => {
-        return user.admin;
-      })) {
-        this.menu.push(
+        );
+      }
+
+      if (loggedInUser.admin === true && loggedInUser.allowed === true) {
+        newMenu.push(
           {
             title: 'All user sightings',
             url: '/all-sightings',
@@ -165,7 +168,7 @@ export class AppComponent implements OnInit {
 
     } else {
       this.router.navigate(['/landing']);
-      this.menu.push(
+      newMenu.push(
         {
           title: 'Home',
           url: '/home',
@@ -183,6 +186,7 @@ export class AppComponent implements OnInit {
         }
       );
     }
+    this.menu = newMenu;
   }
 
   async isUserAdmin() {
@@ -194,5 +198,6 @@ export class AppComponent implements OnInit {
   logout() {
     this.auth.logoutUser();
     this.router.navigate(['/landing']);
+    this.checkMenu();
   }
 }
