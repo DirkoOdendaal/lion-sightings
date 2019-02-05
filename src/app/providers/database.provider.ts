@@ -87,7 +87,6 @@ export class Database {
                 allowed: snapshot.data().allowed,
                 denied: snapshot.data().denied
             };
-            console.log(loggedInUser);
 
             return Promise.resolve(loggedInUser);
         });
@@ -174,7 +173,6 @@ export class Database {
 
     getSightingById(id: number): Promise<any> {
         const list = [];
-        console.log('getSightingById');
         return this.db.collection('sightings').doc(id.toString()).get().toPromise().then(snapshot => {
             return Promise.resolve(snapshot.data());
         });

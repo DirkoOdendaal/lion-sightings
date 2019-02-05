@@ -112,8 +112,6 @@ export class AppComponent implements OnInit {
   }
 
   checkMenu(loggedInUser?: User) {
-    console.log('Checking menu');
-    console.log(loggedInUser);
     const newMenu = [];
     this.menu.splice(0, this.menu.length);
     if (loggedInUser) {
