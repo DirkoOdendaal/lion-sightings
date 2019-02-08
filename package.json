@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "production-build": "npm run ionic:build --prod --service-worker",
+    "production-build": "ionic build --prod --service-worker",
     "publish": "firebase deploy"
   },
   "private": true,
