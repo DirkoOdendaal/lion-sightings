@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Platform, ToastController } from '@ionic/angular';
+import { Platform, ToastController, AlertController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -9,6 +9,8 @@ import { Database } from './providers/database.provider';
 import { Router } from '@angular/router';
 import { User } from './models/user.model';
 import { get, set } from 'idb-keyval';
+
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: 'app-root',
@@ -43,7 +45,9 @@ export class AppComponent implements OnInit {
     private auth: AuthData,
     private database: Database,
     private router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private alertController: AlertController,
+    private swUpdate: SwUpdate
   ) {
     this.initializeApp();
 
@@ -75,6 +79,31 @@ export class AppComponent implements OnInit {
     if (isIos() && !isInStandaloneMode() && isBannerShown === 'undefined') {
       this.showIosInstallBanner();
     }
+
+    // Check for updates
+    if (this.swUpdate.isEnabled) {
+      this.swUpdate.available.subscribe(async () => {
+        const alert = await this.alertController.create({
+          header: `Ooo shiny!`,
+          message: `Newer version of the app is available. It's a quick refresh away!`,
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              cssClass: 'secondary',
+            }, {
+              text: 'Refresh',
+              handler: () => {
+                window.location.reload();
+              },
+            },
+          ],
+        });
+
+        await alert.present();
+      });
+    }
+
   }
 
   initializeApp() {
