@@ -1,10 +1,11 @@
 
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 import { Component } from '@angular/core';
 import { Sighting } from '../../models';
 import { Database } from '../../providers/database.provider';
 import { Router } from '@angular/router';
+import { EmailService } from '../../services/email.service';
 /**
  * Generated class for the Landing page.
  *
@@ -23,15 +24,23 @@ export class ExportPage {
     emailAddress = 'tito@mail.com';
 
     public sightings: Array<Sighting> = [];
-    constructor(public database: Database, public router: Router, public loadingCtrl: LoadingController) {
+    constructor(public database: Database, public router: Router,
+        public loadingCtrl: LoadingController, public emailService: EmailService,
+        private toastController: ToastController) {
         this.presentLoading();
         this.database.getSightingsForAllUsers().then(sightings => {
             this.sightings = sightings;
             this.dismisLoading();
         });
+
+        this.database.getUserDetails().then(user => {
+            this.name = user.firstname;
+            this.emailAddress = user.email;
+        });
     }
 
     async presentLoading() {
+        this.isLoading = true;
         this.loading = await this.loadingCtrl.create().then(a => {
             a.present().then(() => {
                 if (!this.isLoading) {
@@ -46,7 +55,27 @@ export class ExportPage {
         return await this.loadingCtrl.dismiss();
     }
 
-    exportAll() {
+   async exportAll() {
+        this.presentLoading();
+        this.emailService.requestEmail(this.emailAddress).then(result => {
+            if (result === 200) {
+               this.showToast('Email sent');
+            } else {
+                this.showToast('Gasp, issue with sending email...');
+            }
+            this.dismisLoading();
+        });
+    }
+
+    async showToast(message: string) {
+        const toast = await this.toastController.create({
+            showCloseButton: true,
+            closeButtonText: 'OK',
+            position: 'bottom',
+            message: message,
+            color: 'primary'
+          });
+          toast.present();
     }
 
 }

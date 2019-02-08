@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -28,6 +29,8 @@ import { StorageProvider } from './providers/storage.provider';
 
 import { ServiceWorkerModule } from '@angular/service-worker';
 
+import { EmailService } from './services/email.service';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -40,6 +43,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AngularFireAuthModule,
     AngularFireStorageModule,
     FormsModule,
+    HttpModule,
     ReactiveFormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
@@ -55,6 +59,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     Geolocation,
     File,
     ActionSheet,
+    EmailService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -7,5 +7,6 @@ export const environment = {
     projectId: 'lion-sightings',
     storageBucket: 'lion-sightings.appspot.com',
     messagingSenderId: '113147914649'
-  }
+  },
+  apiUrl: 'http://35.187.71.28'
 };
