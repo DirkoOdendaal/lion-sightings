@@ -5,7 +5,7 @@ import {
     Platform
 } from '@ionic/angular';
 
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ManageStorage } from '../../providers/manage-storage.provider';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
@@ -27,7 +27,7 @@ import fixOrientation from 'fix-orientation';
     templateUrl: 'capture-sighting.page.html',
 })
 export class CaptureSightingPage {
-
+    @ViewChild('captureForm') formValues;
     imgDisplay = [];
     photos: Photo[] = [];
     photoCounter = 1;
@@ -218,6 +218,7 @@ export class CaptureSightingPage {
                         };
                         this.manageStorage.addSighting(newSighting).then(result => {
                             this.dismisLoading();
+                            this.formValues.resetForm();
                             if (result) {
                                 this.router.navigate(['/captured/', result]);
                             }

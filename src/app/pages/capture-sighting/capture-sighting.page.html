@@ -17,7 +17,7 @@
 
 
 <ion-content padding>
-    <form [formGroup]='sightingForm' (ngSubmit)="saveSighting()" novalidate>
+    <form #captureForm="ngForm" [formGroup]='sightingForm' (ngSubmit)="saveSighting()" novalidate>
         <ion-item>
             <ion-label position="stacked">Temperature</ion-label>
             <ion-select formControlName="temperature" value="0" ok-text="Okay" cancel-text="Dismiss">
