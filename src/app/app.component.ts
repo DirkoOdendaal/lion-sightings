@@ -112,6 +112,8 @@ export class AppComponent implements OnInit {
     // Check if app back online and do updates to DB
     this.networkService.onNetworkChange().subscribe((status: ConnectionStatus) => {
       if (status === ConnectionStatus.Online) {
+        this.database.getCurrentSightingNumber();
+        this.database.getAllLionIds();
         this.offlineManagerService.checkForEvents().subscribe();
         this.offlineManagerService.checkForImageEvents().subscribe();
       }

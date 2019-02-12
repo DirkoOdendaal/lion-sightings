@@ -99,6 +99,15 @@ export class Database {
         return resultList;
     }
 
+    getCurrentSightingNumber() {
+        const nextSighting = this.db.collection('sightings').ref.get()
+            .then(snapshot => {
+                return Promise.resolve(snapshot.size);
+            });
+        nextSighting.then(val => this.localStorageProvider.setLocalData('next_sighting', val + 1));
+        return nextSighting;
+    }
+
     getNextSightingNumber() {
         const nextSighting = this.db.collection('sightings').ref.get()
             .then(snapshot => {
