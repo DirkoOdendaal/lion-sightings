@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Database } from '../../providers/database.provider';
+import { ManageStorage } from '../../providers/manage-storage.provider';
 import { User } from '../../models';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
@@ -28,11 +28,11 @@ export class HomePage {
     denied: false
   };
 
-  constructor(private database: Database, public router: Router, public loadingCtrl: LoadingController) {
+  constructor(private manageStorage: ManageStorage, public router: Router, public loadingCtrl: LoadingController) {
 
     this.presentLoading();
 
-    this.database.getUserDetails().then(result => {
+    this.manageStorage.getUserDetails().then(result => {
       this.user = {
         user_id: result.user_id,
         firstname: result.firstname,
@@ -43,6 +43,8 @@ export class HomePage {
         denied: result.denied
       };
       this.dismisLoading();
+    }).catch(err => {
+      console.log('Error', err);
     });
   }
 

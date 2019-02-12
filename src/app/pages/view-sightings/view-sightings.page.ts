@@ -2,7 +2,7 @@ import { LoadingController } from '@ionic/angular';
 
 import { Component } from '@angular/core';
 import { Sighting } from '../../models';
-import { Database } from '../../providers/database.provider';
+import { ManageStorage } from '../../providers/manage-storage.provider';
 import { Router } from '@angular/router';
 /**
  * Generated class for the Landing page.
@@ -20,9 +20,9 @@ export class ViewSightingsPage {
     isLoading = true;
 
     public sightings: Array<Sighting> = [];
-    constructor(public database: Database, public router: Router, public loadingCtrl: LoadingController) {
+    constructor(public manageStorage: ManageStorage, public router: Router, public loadingCtrl: LoadingController) {
         this.presentLoading();
-        this.database.getSightingsForUser().then(sightings => {
+        this.manageStorage.getSightingsForUser().then(sightings => {
             this.sightings = sightings;
             this.dismisLoading();
         });

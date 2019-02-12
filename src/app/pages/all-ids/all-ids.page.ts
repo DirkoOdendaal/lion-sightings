@@ -3,8 +3,8 @@ import { LoadingController, ActionSheetController } from '@ionic/angular';
 import { ActionSheet, ActionSheetOptions } from '@ionic-native/action-sheet/ngx';
 import { Component } from '@angular/core';
 import { LionId } from '../../models';
-import { Database } from '../../providers/database.provider';
-import { Router, NavigationEnd, NavigationStart } from '@angular/router';
+import { ManageStorage } from '../../providers/manage-storage.provider';
+import { Router, NavigationStart } from '@angular/router';
 
 /**
  * Generated class for the Landing page.
@@ -23,10 +23,10 @@ export class AllIdsPage {
     lionIdsList = [];
 
     public lionIds: Array<LionId> = [];
-    constructor(public database: Database, public router: Router,
+    constructor(public manageStorage: ManageStorage, public router: Router,
         public loadingCtrl: LoadingController, public actionSheetController: ActionSheetController, private actionSheet: ActionSheet) {
         this.presentLoading();
-        this.database.getAllLionIds().then(result => {
+        this.manageStorage.getAllLionIds().then(result => {
             this.lionIdsList = result;
             this.dismisLoading();
         });
@@ -43,7 +43,7 @@ export class AllIdsPage {
 
     reloadIds() {
         this.presentLoading();
-        this.database.getAllLionIds().then(result => {
+        this.manageStorage.getAllLionIds().then(result => {
             this.lionIdsList = result;
             this.dismisLoading();
         });
@@ -183,7 +183,7 @@ export class AllIdsPage {
 
     updateId(lionId: LionId) {
 
-        this.database.updateId(
+        this.manageStorage.updateId(
             {
                 id: lionId.id,
                 lost: lionId.lost,

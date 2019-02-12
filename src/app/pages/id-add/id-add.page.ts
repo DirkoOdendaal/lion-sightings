@@ -4,7 +4,7 @@ import { LoadingController } from '@ionic/angular';
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { LionId } from '../../models';
-import { Database } from '../../providers/database.provider';
+import { ManageStorage } from '../../providers/manage-storage.provider';
 import { Router } from '@angular/router';
 /**
  * Generated class for the Landing page.
@@ -23,7 +23,8 @@ export class IdAddPage {
     public lionIdForm;
 
     public lionIds: Array<LionId> = [];
-    constructor(public database: Database, public router: Router, public loadingCtrl: LoadingController, public formBuilder: FormBuilder) {
+    constructor(public manageStorage: ManageStorage, public router: Router,
+        public loadingCtrl: LoadingController, public formBuilder: FormBuilder) {
         this.lionIdForm = formBuilder.group({
             id: ['', Validators.compose([Validators.required])]
         });
@@ -52,7 +53,7 @@ export class IdAddPage {
             died: false,
             lost: false
         };
-        this.database.addId(newId).then(response => {
+        this.manageStorage.addId(newId).then(response => {
 
             setTimeout(() => {
                 this.dismisLoading();

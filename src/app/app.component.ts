@@ -12,6 +12,9 @@ import { get, set } from 'idb-keyval';
 
 import { SwUpdate } from '@angular/service-worker';
 
+import { NetworkService, ConnectionStatus } from './services/network.service';
+import { OfflineManagerService } from './services/offline-manager.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
@@ -47,7 +50,9 @@ export class AppComponent implements OnInit {
     private router: Router,
     private toastController: ToastController,
     private alertController: AlertController,
-    private swUpdate: SwUpdate
+    private swUpdate: SwUpdate,
+    private networkService: NetworkService,
+    private offlineManagerService: OfflineManagerService
   ) {
     this.initializeApp();
 
@@ -103,6 +108,14 @@ export class AppComponent implements OnInit {
         await alert.present();
       });
     }
+
+    // Check if app back online and do updates to DB
+    this.networkService.onNetworkChange().subscribe((status: ConnectionStatus) => {
+      if (status === ConnectionStatus.Online) {
+        this.offlineManagerService.checkForEvents().subscribe();
+        this.offlineManagerService.checkForImageEvents().subscribe();
+      }
+    });
 
   }
 
@@ -212,12 +225,6 @@ export class AppComponent implements OnInit {
       );
     }
     this.menu = newMenu;
-  }
-
-  async isUserAdmin() {
-    return this.database.getUserDetails().then(user => {
-      return user.admin;
-    });
   }
 
   logout() {

@@ -1,8 +1,7 @@
 
 import { LoadingController } from '@ionic/angular';
-
 import { Component } from '@angular/core';
-import { Database } from '../../providers/database.provider';
+import { ManageStorage } from '../../providers/manage-storage.provider';
 import { User } from '../../models';
 /**
  * Generated class for the Landing page.
@@ -20,14 +19,14 @@ export class ManageUsersPage {
     isLoading = true;
     public users: Array<User> = [];
 
-    constructor(public database: Database, public loadingCtrl: LoadingController) {
+    constructor(public manageStorage: ManageStorage, public loadingCtrl: LoadingController) {
         this.presentLoading();
-        this.database.getAllUsers().then(users => {
+        this.manageStorage.getAllUsers().then(users => {
             this.users = users;
             this.dismisLoading();
         });
 
-        this.database.userDetails().subscribe((change) => {
+        this.manageStorage.userDetails().subscribe((change) => {
             const updatedUsers = [];
             change.forEach(user => {
                 if (!user.admin) {
@@ -65,7 +64,7 @@ export class ManageUsersPage {
             user_id: user.user_id
         };
 
-        this.database.updateUser(newUser);
+        this.manageStorage.updateUser(newUser);
     }
 
     denyUser(user: User) {
@@ -80,7 +79,7 @@ export class ManageUsersPage {
             user_id: user.user_id
         };
 
-        this.database.updateUser(newUser);
+        this.manageStorage.updateUser(newUser);
     }
 
 }

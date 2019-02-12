@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Database } from '../../providers/database.provider';
+import { ManageStorage } from '../../providers/manage-storage.provider';
 /**
  * Generated class for the Landing page.
  *
@@ -16,11 +16,11 @@ export class SightingPage {
     sighting_id;
     sighting;
 
-    constructor(public route: ActivatedRoute, private database: Database) {
+    constructor(public route: ActivatedRoute, private manageStorage: ManageStorage) {
 
        this.route.params.subscribe(params => {
             this.sighting_id = +params['id'];
-            this.database.getSightingById(this.sighting_id).then(result => {
+            this.manageStorage.getSightingById(this.sighting_id).then(result => {
                 this.sighting = result;
             });
          });

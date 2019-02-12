@@ -3,7 +3,7 @@ import { LoadingController, ToastController } from '@ionic/angular';
 
 import { Component } from '@angular/core';
 import { Sighting } from '../../models';
-import { Database } from '../../providers/database.provider';
+import { ManageStorage } from '../../providers/manage-storage.provider';
 import { Router } from '@angular/router';
 import { EmailService } from '../../services/email.service';
 /**
@@ -24,19 +24,19 @@ export class ExportPage {
     emailAddress = 'tito@mail.com';
 
     public sightings: Array<Sighting> = [];
-    constructor(public database: Database, public router: Router,
+    constructor(public manageStorage: ManageStorage, public router: Router,
         public loadingCtrl: LoadingController, public emailService: EmailService,
         private toastController: ToastController) {
         this.presentLoading();
-        this.database.getSightingsForAllUsers().then(sightings => {
+        this.manageStorage.getSightingsForAllUsers().then(sightings => {
             this.sightings = sightings;
             this.dismisLoading();
         });
 
-        this.database.getUserDetails().then(user => {
+        this.manageStorage.getUserDetails().then(user => {
             this.name = user.firstname;
             this.emailAddress = user.email;
-        });
+        }).catch(err => console.log('export error', err));
     }
 
     async presentLoading() {

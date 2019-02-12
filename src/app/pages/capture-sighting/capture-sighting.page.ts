@@ -1,13 +1,13 @@
 
 import {
     LoadingController,
-    AlertController
+    AlertController,
+    Platform
 } from '@ionic/angular';
 
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Database } from '../../providers/database.provider';
-import { StorageProvider } from '../../providers/storage.provider';
+import { ManageStorage } from '../../providers/manage-storage.provider';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { Crop } from '@ionic-native/crop/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
@@ -38,6 +38,9 @@ export class CaptureSightingPage {
     lionIdSelect = [];
     isLoading = true;
     photosUrls: string[] = [];
+    lat;
+    lon;
+    watching;
 
     constructor(public formBuilder: FormBuilder,
         public loadingCtrl: LoadingController,
@@ -46,9 +49,9 @@ export class CaptureSightingPage {
         public imagePicker: ImagePicker,
         public cropService: Crop,
         public camera: Camera,
-        public database: Database,
+        public manageStorage: ManageStorage,
         public geolocation: Geolocation,
-        public storage: StorageProvider) {
+        public platform: Platform) {
 
         this.sightingForm = formBuilder.group({
             temperature: [0, Validators.compose([Validators.required])],
@@ -68,12 +71,18 @@ export class CaptureSightingPage {
             carcass_utilization: ['10'],
             comments: ['']
         });
-
-        this.database.getAllAvailableLionIds().then(result => {
+        this.platform.ready().then(() => {
+        this.manageStorage.getAllAvailableLionIds().then(result => {
             result.forEach(element => {
                 this.lionIdSelect.push(element.id);
             });
         });
+
+        this.watching = this.geolocation.watchPosition().subscribe(pos => {
+            this.lat = pos.coords.latitude;
+            this.lon = pos.coords.longitude;
+        });
+    });
     }
 
     displayCard() {
@@ -160,21 +169,22 @@ export class CaptureSightingPage {
     }
 
     saveSighting() {
-        let latitude = 0;
-        let longitude = 0;
+        // let latitude = 0;
+        // let longitude = 0;
 
-        this.geolocation.getCurrentPosition().then((resp) => {
-            latitude = resp.coords.latitude;
-            longitude = resp.coords.longitude;
+        // this.geolocation.getCurrentPosition().then((resp) => {
+        //     latitude = resp.coords.latitude;
+        //     longitude = resp.coords.longitude;
+        this.watching.unsubscribe();
             if (!this.sightingForm.valid) {
                 console.log(this.sightingForm.value);
             } else {
                 this.presentLoading();
 
                 let newSighting: Sighting;
-                this.database.getNextSightingNumber().then(number => {
+                this.manageStorage.getNextSightingNumber().then(number => {
 
-                    this.storage.saveImages(this.photos, number).then(urls => {
+                    this.manageStorage.saveImages(this.photos, number).then(urls => {
 
                         console.log('savedImages');
                         console.log(urls);
@@ -186,8 +196,8 @@ export class CaptureSightingPage {
                         newSighting = {
                             sighting_number: number,
                             user: '',
-                            latitude: latitude,
-                            longitude: longitude,
+                            latitude: this.lat,
+                            longitude: this.lon,
                             adult_female: this.sightingForm.value.adult_female,
                             adult_male: this.sightingForm.value.adult_male,
                             sub_adult_female: this.sightingForm.value.sub_adult_female,
@@ -206,7 +216,7 @@ export class CaptureSightingPage {
                             photos: this.photosUrls,
                             activity: this.sightingForm.value.activity
                         };
-                        this.database.addSighting(newSighting).then(result => {
+                        this.manageStorage.addSighting(newSighting).then(result => {
                             this.dismisLoading();
                             if (result) {
                                 this.router.navigate(['/captured/', result]);
@@ -215,9 +225,9 @@ export class CaptureSightingPage {
                     });
                 });
             }
-        }).catch((error) => {
-            console.log('Error getting location', error);
-        });
+        // }).catch((error) => {
+        //     console.log('Error getting location', error);
+        // });
 
     }
 
