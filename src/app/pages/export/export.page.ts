@@ -36,7 +36,7 @@ export class ExportPage {
         this.manageStorage.getUserDetails().then(user => {
             this.name = user.firstname;
             this.emailAddress = user.email;
-        }).catch(err => console.log('export error', err));
+        });
     }
 
     async presentLoading() {

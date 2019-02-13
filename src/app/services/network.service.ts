@@ -27,14 +27,14 @@ export class NetworkService {
 
         this.network.onDisconnect().subscribe(() => {
             if (this.status.getValue() === ConnectionStatus.Online) {
-                console.log('WE ARE OFFLINE');
+                // console.log('WE ARE OFFLINE');
                 this.updateNetworkStatus(ConnectionStatus.Offline);
             }
         });
 
         this.network.onConnect().subscribe(() => {
             if (this.status.getValue() === ConnectionStatus.Offline) {
-                console.log('WE ARE ONLINE');
+                // console.log('WE ARE ONLINE');
                 this.updateNetworkStatus(ConnectionStatus.Online);
             }
         });
@@ -57,7 +57,6 @@ export class NetworkService {
     }
 
     public getCurrentNetworkStatus(): ConnectionStatus {
-        console.log(this.status);
         return this.status.getValue();
     }
 }

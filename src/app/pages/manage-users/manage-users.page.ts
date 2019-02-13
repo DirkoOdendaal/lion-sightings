@@ -53,7 +53,6 @@ export class ManageUsersPage {
     }
 
     allowUser(user: User) {
-        console.log(user);
         const newUser: User = {
             firstname: user.firstname,
             surname: user.surname,
@@ -68,7 +67,6 @@ export class ManageUsersPage {
     }
 
     denyUser(user: User) {
-        console.log(user);
         const newUser: User = {
             firstname: user.firstname,
             surname: user.surname,

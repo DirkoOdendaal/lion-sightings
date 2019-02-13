@@ -133,10 +133,9 @@ export class CaptureSightingPage {
         this.imagePicker.getPictures(options)
             .then((results) => {
                 this.reduceImages(results).then(() => {
-                    console.log('all images cropped!!');
                     this.photos.push(results);
                 });
-            }, (err) => { console.log(err); });
+            });
     }
 
     reduceImages(selected_pictures: any): any {
@@ -162,9 +161,7 @@ export class CaptureSightingPage {
                     .crop(data, { quality: 75 })
                     .then((newImage) => {
                         this.photosUrls.push(newImage);
-                    }, error => console.error('Error cropping image', error));
-            }, function (error) {
-                console.log(error);
+                    });
             });
     }
 
@@ -177,7 +174,7 @@ export class CaptureSightingPage {
         //     longitude = resp.coords.longitude;
         this.watching.unsubscribe();
             if (!this.sightingForm.valid) {
-                console.log(this.sightingForm.value);
+                // console.log(this.sightingForm.value);
             } else {
                 this.presentLoading();
 
@@ -186,13 +183,7 @@ export class CaptureSightingPage {
 
                     this.manageStorage.saveImages(this.photos, number).then(urls => {
 
-                        console.log('savedImages');
-                        console.log(urls);
-                        urls.forEach(url => {
-                            console.log(url);
-                        });
                         this.photosUrls = urls;
-                        console.log(this.photosUrls);
                         newSighting = {
                             sighting_number: number,
                             user: '',

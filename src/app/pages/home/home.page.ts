@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ManageStorage } from '../../providers/manage-storage.provider';
 import { User } from '../../models';
 import { Router } from '@angular/router';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, Platform } from '@ionic/angular';
 
 /**
  * Generated class for the Landing page.
@@ -28,24 +28,25 @@ export class HomePage {
     denied: false
   };
 
-  constructor(private manageStorage: ManageStorage, public router: Router, public loadingCtrl: LoadingController) {
+  constructor(private manageStorage: ManageStorage, public router: Router,
+    public loadingCtrl: LoadingController, public platform: Platform) {
 
-    this.presentLoading();
+      this.platform.ready().then((readySource) => {
+        this.presentLoading();
 
-    this.manageStorage.getUserDetails().then(result => {
-      this.user = {
-        user_id: result.user_id,
-        firstname: result.firstname,
-        surname: result.surname,
-        email: result.email,
-        admin: result.admin,
-        allowed: result.allowed,
-        denied: result.denied
-      };
-      this.dismisLoading();
-    }).catch(err => {
-      console.log('Error', err);
-    });
+        this.manageStorage.getUserDetails().then(result => {
+          this.user = {
+            user_id: result.user_id,
+            firstname: result.firstname,
+            surname: result.surname,
+            email: result.email,
+            admin: result.admin,
+            allowed: result.allowed,
+            denied: result.denied
+          };
+          this.dismisLoading();
+        });
+      });
   }
 
   async presentLoading() {

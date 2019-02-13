@@ -33,9 +33,8 @@ export class SignInPage {
     }
 
    loginUser(): void {
-        console.log('!!!!!!!!!!!SUBMITTING!!!!!!!!!!');
         if (!this.loginForm.valid) {
-            console.log(this.loginForm.value);
+            // console.log(this.loginForm.value);
         } else {
             this.authData.loginUser(this.loginForm.value.email, this.loginForm.value.password).then(authData => {
                 this.dismisAndRoute();

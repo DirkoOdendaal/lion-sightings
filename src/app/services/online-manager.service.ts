@@ -17,7 +17,6 @@ sendRequests(operations: StoredRequest[]) {
     const obs = [];
 
     for (const op of operations) {
-        console.log('Make one request: ', op);
         let oneObs;
         if (op.type === 'update_user') {
             oneObs = this.database.updateUser(op.data);
@@ -38,7 +37,6 @@ sendRequests(operations: StoredRequest[]) {
 processImages(operations: StoredRequest[]) {
     const obs = [];
     for (const op of operations) {
-        console.log('Make one request: ', op);
         let oneObs;
         if (op.type === 'save_photos') {
             oneObs = this.saveImagesLater(op.data.photos, op.data.sightingNumber);

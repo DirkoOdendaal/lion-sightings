@@ -34,7 +34,6 @@ export class OfflineManagerService {
                             return of(true);
                         });
                     } else {
-                        console.log('no local events to sync');
                         return Promise.resolve(of(false));
                     }
                 })
@@ -59,7 +58,6 @@ export class OfflineManagerService {
                             return of(true);
                         });
                     } else {
-                        console.log('no local image events to sync');
                             return Promise.resolve(of(false));
                     }
                 })

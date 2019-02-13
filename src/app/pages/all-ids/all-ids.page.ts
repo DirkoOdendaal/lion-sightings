@@ -170,7 +170,6 @@ export class AllIdsPage {
             text: 'Cancel',
             role: 'cancel',
             handler: () => {
-                console.log('Cancel clicked');
             }
         });
 

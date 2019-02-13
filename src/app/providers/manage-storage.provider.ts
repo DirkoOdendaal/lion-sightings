@@ -43,12 +43,9 @@ export class ManageStorage {
     }
 
     getUserDetails() {
-        console.log('In getUserDetails');
         if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
-            console.log('offline section');
             return Promise.resolve(this.localStorageProvider.getLocalData('get_user_details'));
         } else {
-            console.log('online section');
             return Promise.resolve(this.database.getUserDetails());
         }
     }

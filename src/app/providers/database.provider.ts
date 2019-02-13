@@ -114,8 +114,6 @@ export class Database {
                 return Promise.resolve(snapshot.size + 1);
             })
             .catch(err => {
-                console.log('error location');
-                console.log(err);
                 return Promise.resolve(1);
             });
         nextSighting.then(val => this.localStorageProvider.setLocalData('next_sighting', val));
@@ -148,8 +146,6 @@ export class Database {
             photos: sighting.photos
         }).then(pass => {
             return sighting.sighting_number.toString();
-        }).catch(err => {
-            console.log('Big problem!!', err);
         });
     }
 
@@ -179,8 +175,6 @@ export class Database {
             photos: sighting.photos
         }).then(pass => {
             return sighting.sighting_number.toString();
-        }).catch(err => {
-            console.log('Big problem!!', err);
         });
     }
 

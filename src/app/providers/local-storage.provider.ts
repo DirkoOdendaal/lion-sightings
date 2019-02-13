@@ -13,16 +13,11 @@ export class LocalStorageProvider {
 
     // Save result of requests
     setLocalData(key, data) {
-        console.log('set local data');
-        console.log(data);
-        this.storage.set(`${STORAGE_KEY}-${key}`, data)
-        .then(val => console.log('store success', val))
-        .catch(err => console.log('store err ', err));
+        this.storage.set(`${STORAGE_KEY}-${key}`, data);
     }
 
     // Get cached result
     getLocalData(key) {
-        console.log('get local data');
         return this.storage.get(`${STORAGE_KEY}-${key}`);
     }
 

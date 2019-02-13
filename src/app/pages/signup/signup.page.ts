@@ -47,7 +47,7 @@ export class SignUpPage {
     signupUser() {
         this.presentLoading();
         if (!this.signupForm.valid) {
-            console.log(this.signupForm.value);
+            // console.log(this.signupForm.value);
             this.dismisLoading();
         } else {
             const newUser: User = {
