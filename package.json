@@ -28,6 +28,7 @@
     "@ionic-native/camera": "^5.0.0",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/crop": "^5.0.0",
+    "@ionic-native/diagnostic": "^5.1.0",
     "@ionic-native/file": "^5.0.0",
     "@ionic-native/geolocation": "^5.0.0",
     "@ionic-native/image-picker": "^5.0.0",
@@ -98,7 +99,7 @@
       "cordova-plugin-image-picker": {},
       "cordova-plugin-camera": {},
       "cordova-plugin-geolocation": {
-        "GEOLOCATION_USAGE_DESCRIPTION": "To pinpoint the sighting location"
+        "GEOLOCATION_USAGE_DESCRIPTION": "We require access to your location to pin the sightings you see."
       },
       "cordova-plugin-file": {},
       "cordova-plugin-actionsheet": {},

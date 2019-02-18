@@ -265,4 +265,13 @@ export class Database {
         availableIds.then(val => this.localStorageProvider.setLocalData('all_available_ids', val));
         return availableIds;
     }
+
+    setValue() {
+        return this.db.collection('tests').doc(new Date().toString()).set({
+            working: new Date().toString(),
+            user: this.db.firestore.app.auth().currentUser.uid
+        }).then(response => {
+            return response;
+        });
+    }
 }

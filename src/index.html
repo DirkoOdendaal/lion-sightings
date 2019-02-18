@@ -63,11 +63,26 @@
 
 </head>
 
-<body>
+<body ontouchstart="">
   <app-root></app-root>
   <noscript>Please enable JavaScript to continue using this application.</noscript>
 </body>
-<script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-storage.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyAOgYSvhHZf2IyjqianTsEyoXGZVGfPQxM",
+    authDomain: "lion-sightings.firebaseapp.com",
+    databaseURL: "https://lion-sightings.firebaseio.com",
+    projectId: "lion-sightings",
+    storageBucket: "lion-sightings.appspot.com",
+    messagingSenderId: "113147914649"
+  };
+  firebase.initializeApp(config);
+</script>
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('ngsw-worker.js');

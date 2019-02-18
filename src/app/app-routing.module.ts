@@ -66,6 +66,10 @@ const routes: Routes = [
   {
     path: 'reset-password',
     loadChildren: './pages/reset-password/reset-password.module#ResetPasswordPageModule'
+  },
+  {
+    path: 'tests',
+    loadChildren: './pages/tests/tests.module#TestsPageModule'
   }
 ];
 

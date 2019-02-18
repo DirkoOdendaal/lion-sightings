@@ -58,12 +58,15 @@ export class ExportPage {
    async exportAll() {
         this.presentLoading();
         this.emailService.requestEmail(this.emailAddress).then(result => {
-            if (result === 200) {
+            this.dismisLoading();
+            if (result === null) {
                this.showToast('Email sent');
             } else {
-                this.showToast('Gasp, issue with sending email...');
+                this.showToast(JSON.stringify(result));
             }
+        }).catch(err => {
             this.dismisLoading();
+            this.showToast(err.message);
         });
     }
 

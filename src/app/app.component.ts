@@ -30,12 +30,12 @@ export class AppComponent implements OnInit {
     {
       title: 'Sign up',
       url: '/register',
-      icon: 'lock'
+      icon: 'clipboard'
     },
     {
       title: 'Login',
       url: '/login',
-      icon: 'lock'
+      icon: 'unlock'
     }
   ];
 
@@ -99,7 +99,7 @@ export class AppComponent implements OnInit {
             }, {
               text: 'Refresh',
               handler: () => {
-                window.location.reload();
+                this.swUpdate.activateUpdate().then(() => document.location.reload());
               },
             },
           ],
@@ -170,12 +170,12 @@ export class AppComponent implements OnInit {
           {
             title: 'Capture',
             url: '/capture',
-            icon: 'lock'
+            icon: 'locate'
           },
           {
             title: 'My sightings',
             url: '/view-sightings',
-            icon: 'lock'
+            icon: 'pin'
           }
 
         );
@@ -186,22 +186,27 @@ export class AppComponent implements OnInit {
           {
             title: 'All user sightings',
             url: '/all-sightings',
-            icon: 'lock'
+            icon: 'map'
           },
           {
             title: 'Manage users',
             url: '/manage',
-            icon: 'lock'
+            icon: 'contacts'
           },
           {
             title: 'Lion ID',
             url: '/all-ids',
-            icon: 'lock'
+            icon: 'paw'
           },
           {
             title: 'Export',
             url: '/export',
-            icon: 'lock'
+            icon: 'mail'
+          },
+          {
+            title: 'Tests',
+            url: '/tests',
+            icon: 'map'
           }
         );
       }
@@ -217,12 +222,12 @@ export class AppComponent implements OnInit {
         {
           title: 'Sign up',
           url: '/register',
-          icon: 'lock'
+          icon: 'clipboard'
         },
         {
           title: 'Login',
           url: '/login',
-          icon: 'lock'
+          icon: 'unlock'
         }
       );
     }

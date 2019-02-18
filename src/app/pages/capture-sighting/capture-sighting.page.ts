@@ -15,6 +15,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Sighting, Photo } from 'src/app/models';
 import { Router } from '@angular/router';
 
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+
 import fixOrientation from 'fix-orientation';
 /**
  * Generated class for the Landing page.
@@ -38,9 +40,11 @@ export class CaptureSightingPage {
     lionIdSelect = [];
     isLoading = true;
     photosUrls: string[] = [];
-    lat;
-    lon;
+    lat = 0;
+    lon = 0;
     watching;
+    blockShown = false;
+    popover;
 
     constructor(public formBuilder: FormBuilder,
         public loadingCtrl: LoadingController,
@@ -51,7 +55,8 @@ export class CaptureSightingPage {
         public camera: Camera,
         public manageStorage: ManageStorage,
         public geolocation: Geolocation,
-        public platform: Platform) {
+        public platform: Platform,
+        public diagnostic: Diagnostic) {
 
         this.sightingForm = formBuilder.group({
             temperature: [0, Validators.compose([Validators.required])],
@@ -72,17 +77,80 @@ export class CaptureSightingPage {
             comments: ['']
         });
         this.platform.ready().then(() => {
-        this.manageStorage.getAllAvailableLionIds().then(result => {
-            result.forEach(element => {
-                this.lionIdSelect.push(element.id);
-            });
-        });
 
-        this.watching = this.geolocation.watchPosition().subscribe(pos => {
-            this.lat = pos.coords.latitude;
-            this.lon = pos.coords.longitude;
+            // this.diagnostic.getLocationMode().then(success => this.showBlockingPopover('Mode' + success));
+
+            this.watching = this.geolocation.watchPosition().subscribe(pos => {
+
+                // Check if location services on and access granted
+                //  const enabled = this.diagnostic.isLocationEnabled()
+                //  .then(success => true,
+                //      error => {
+                //          this.showBlockingPopover('Location service is not enabled');
+                //         return false;
+                //     });
+                this.diagnostic.isLocationEnabled()
+                    .then(() => this.hideBlockingPopover(),
+                        () => {
+                             this.showBlockingPopover('1We see that your location service is off. ' +
+                             'Please switch this on and try again. We require access to your location in order to pin the sighting.');
+                            return false;
+                        });
+
+                // this.diagnostic.isLocationAuthorized()
+                //     .then(() => this.hideBlockingPopover(),
+                //         () => {
+                            //  this.showBlockingPopover('We see that you have declined access to your location. ' +
+                            //  'We need this access in order to pin the location of the sighting. Please close the app and try again.');
+                        // });
+
+                // if (enabled) {
+                this.lat = pos.coords.latitude;
+                this.lon = pos.coords.longitude;
+                // }
+            },
+                () => {
+                    console.log('Error');
+                    this.diagnostic.isLocationEnabled()
+                        .then(() => this.hideBlockingPopover(),
+                            () => {
+                                 this.showBlockingPopover('We see that your location service is off. ');
+                                // +
+                                // 'Please switch this on and try again. We require access to your location in order to pin the sighting.');
+                                return false;
+                            });
+                });
+
+            this.manageStorage.getAllAvailableLionIds().then(result => {
+                result.forEach(element => {
+                    this.lionIdSelect.push(element.id);
+                });
+            });
+
+
         });
-    });
+    }
+
+    hideBlockingPopover() {
+        this.popover.dismiss();
+        this.blockShown = false;
+    }
+
+    async showBlockingPopover(message) {
+        this.popover = await this.alertCtrl.create({
+            backdropDismiss: false,
+            keyboardClose: true,
+            header: 'Ohh snap!!',
+            message: message
+        });
+        return this.showBlocker(this.popover);
+    }
+
+    async showBlocker(popover) {
+        if (!this.blockShown) {
+            this.blockShown = true;
+            await popover.present();
+        }
     }
 
     displayCard() {
@@ -173,50 +241,50 @@ export class CaptureSightingPage {
         //     latitude = resp.coords.latitude;
         //     longitude = resp.coords.longitude;
         this.watching.unsubscribe();
-            if (!this.sightingForm.valid) {
-                // console.log(this.sightingForm.value);
-            } else {
-                this.presentLoading();
+        if (!this.sightingForm.valid) {
+            // console.log(this.sightingForm.value);
+        } else {
+            this.presentLoading();
 
-                let newSighting: Sighting;
-                this.manageStorage.getNextSightingNumber().then(number => {
+            let newSighting: Sighting;
+            this.manageStorage.getNextSightingNumber().then(number => {
 
-                    this.manageStorage.saveImages(this.photos, number).then(urls => {
+                this.manageStorage.saveImages(this.photos, number).then(urls => {
 
-                        this.photosUrls = urls;
-                        newSighting = {
-                            sighting_number: number,
-                            user: '',
-                            latitude: this.lat,
-                            longitude: this.lon,
-                            adult_female: this.sightingForm.value.adult_female,
-                            adult_male: this.sightingForm.value.adult_male,
-                            sub_adult_female: this.sightingForm.value.sub_adult_female,
-                            sub_adult_male: this.sightingForm.value.sub_adult_male,
-                            cub_female: this.sightingForm.value.cub_female,
-                            cub_male: this.sightingForm.value.cub_male,
-                            cub_unknown: this.sightingForm.value.cub_unknown,
-                            lion_id_list: this.sightingForm.value.lion_id_list,
-                            catch: this.sightingForm.value.catch,
-                            catch_age: this.sightingForm.value.catch_age,
-                            catch_gender: this.sightingForm.value.catch_sex,
-                            catch_species: this.sightingForm.value.catch_specie,
-                            carcass_utilization: this.sightingForm.value.carcass_utilization,
-                            comments: this.sightingForm.value.comments,
-                            temperature: this.sightingForm.value.temperature,
-                            photos: this.photosUrls,
-                            activity: this.sightingForm.value.activity
-                        };
-                        this.manageStorage.addSighting(newSighting).then(result => {
-                            this.dismisLoading();
-                            this.formValues.resetForm();
-                            if (result) {
-                                this.router.navigate(['/captured/', result]);
-                            }
-                        });
+                    this.photosUrls = urls;
+                    newSighting = {
+                        sighting_number: number,
+                        user: '',
+                        latitude: this.lat,
+                        longitude: this.lon,
+                        adult_female: this.sightingForm.value.adult_female,
+                        adult_male: this.sightingForm.value.adult_male,
+                        sub_adult_female: this.sightingForm.value.sub_adult_female,
+                        sub_adult_male: this.sightingForm.value.sub_adult_male,
+                        cub_female: this.sightingForm.value.cub_female,
+                        cub_male: this.sightingForm.value.cub_male,
+                        cub_unknown: this.sightingForm.value.cub_unknown,
+                        lion_id_list: this.sightingForm.value.lion_id_list,
+                        catch: this.sightingForm.value.catch,
+                        catch_age: this.sightingForm.value.catch_age,
+                        catch_gender: this.sightingForm.value.catch_sex,
+                        catch_species: this.sightingForm.value.catch_specie,
+                        carcass_utilization: this.sightingForm.value.carcass_utilization,
+                        comments: this.sightingForm.value.comments,
+                        temperature: this.sightingForm.value.temperature,
+                        photos: this.photosUrls,
+                        activity: this.sightingForm.value.activity
+                    };
+                    this.manageStorage.addSighting(newSighting).then(result => {
+                        this.dismisLoading();
+                        this.formValues.resetForm();
+                        if (result) {
+                            this.router.navigate(['/captured/', result]);
+                        }
                     });
                 });
-            }
+            });
+        }
         // }).catch((error) => {
         //     console.log('Error getting location', error);
         // });
