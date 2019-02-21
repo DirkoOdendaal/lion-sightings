@@ -78,24 +78,17 @@ export class CaptureSightingPage {
         });
         this.platform.ready().then(() => {
 
-            // this.diagnostic.getLocationMode().then(success => this.showBlockingPopover('Mode' + success));
-
             this.watching = this.geolocation.watchPosition().subscribe(pos => {
 
-                // Check if location services on and access granted
-                //  const enabled = this.diagnostic.isLocationEnabled()
-                //  .then(success => true,
-                //      error => {
-                //          this.showBlockingPopover('Location service is not enabled');
-                //         return false;
-                //     });
-                this.diagnostic.isLocationEnabled()
-                    .then(() => this.hideBlockingPopover(),
-                        () => {
-                             this.showBlockingPopover('1We see that your location service is off. ' +
-                             'Please switch this on and try again. We require access to your location in order to pin the sighting.');
-                            return false;
-                        });
+
+                // this.diagnostic.isLocationEnabled()
+                //     .then(() => this.hideBlockingPopover(),
+                //         err => {
+                            this.showBlockingPopover('But why!!!');
+                            //  this.showBlockingPopover('1We see that your location service is off. ' +
+                            //  'Please switch this on and try again. We require access to your location in order to pin the sighting.');
+                            // return false;
+                        // });
 
                 // this.diagnostic.isLocationAuthorized()
                 //     .then(() => this.hideBlockingPopover(),
@@ -111,14 +104,15 @@ export class CaptureSightingPage {
             },
                 () => {
                     console.log('Error');
-                    this.diagnostic.isLocationEnabled()
-                        .then(() => this.hideBlockingPopover(),
-                            () => {
-                                 this.showBlockingPopover('We see that your location service is off. ');
-                                // +
-                                // 'Please switch this on and try again. We require access to your location in order to pin the sighting.');
-                                return false;
-                            });
+                    this.showBlockingPopover('We see that your location service is off. ');
+                    // this.diagnostic.isLocationEnabled()
+                    //     .then(() => this.hideBlockingPopover(),
+                    //         () => {
+                    //              this.showBlockingPopover('We see that your location service is off. ');
+                    //             // +
+                    //             'Please switch this on and try again. We require access to your location in order to pin the sighting.');
+                    //             return false;
+                    //         });
                 });
 
             this.manageStorage.getAllAvailableLionIds().then(result => {
@@ -209,7 +203,7 @@ export class CaptureSightingPage {
     reduceImages(selected_pictures: any): any {
         return selected_pictures.reduce((promise: any, item: any) => {
             return promise.then((result) => {
-                return this.cropService.crop(item, { quality: 75 })
+                return this.cropService.crop(item)
                     .then(cropped_image => this.photosUrls.push(cropped_image));
             });
         }, Promise.resolve());

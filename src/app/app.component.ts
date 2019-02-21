@@ -90,7 +90,7 @@ export class AppComponent implements OnInit {
       this.swUpdate.available.subscribe(async () => {
         const alert = await this.alertController.create({
           header: `Ooo shiny!`,
-          message: `Newer version of the app is available. It's a quick refresh away!`,
+          message: `Newer version is available. It's just a quick refresh away!`,
           buttons: [
             {
               text: 'Cancel',
