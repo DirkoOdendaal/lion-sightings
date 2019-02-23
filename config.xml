@@ -22,7 +22,7 @@
     <preference name="FadeSplashScreenDuration" value="1000" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="SplashScreen" value="screen" />
-     <preference name="ShowSplashScreen" value="true" />
+    <preference name="ShowSplashScreen" value="true" />
     <preference name="ShowSplashScreenSpinner" value="true" />
     <preference name="FadeSplashScreen" value="true" />
     <platform name="android">
@@ -95,17 +95,8 @@
     <plugin name="cordova-plugin-camera" spec="4.0.3" />
     <plugin name="cordova-plugin-file" spec="6.0.1" />
     <plugin name="cordova-plugin-actionsheet" spec="2.3.3" />
-    <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
-        <string>We require access to your camera access to take pictures of lions.</string>
-    </edit-config>
-    <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
-        <string>We require access to your photo library to load pictures of lions from there.</string>
-    </edit-config>
-    <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
-        <string>We require access to your location to pin the sightings you see.</string>
-    </edit-config>
-    <engine name="ios" spec="~4.5.5" />
     <plugin name="cordova-plugin-geolocation" spec="4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="We require access to your location to pin the sightings you see." />
     </plugin>
+    <engine name="ios" spec="4.5.5" />
 </widget>
