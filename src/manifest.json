@@ -1,6 +1,6 @@
 {
-  "name": "LionSightingsApp",
-  "short_name": "LionSightings",
+  "name": "Lion Sightings",
+  "short_name": "Lion Sightings",
   "start_url": "/?utm_source=lion_sightings_a2hs",
   "display": "standalone",
   "icons": [

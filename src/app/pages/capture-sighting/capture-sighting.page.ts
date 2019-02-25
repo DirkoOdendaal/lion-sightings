@@ -80,39 +80,14 @@ export class CaptureSightingPage {
 
             this.watching = this.geolocation.watchPosition().subscribe(pos => {
 
-
-                // this.diagnostic.isLocationEnabled()
-                //     .then(() => this.hideBlockingPopover(),
-                //         err => {
-                            this.showBlockingPopover('But why!!!');
-                            //  this.showBlockingPopover('1We see that your location service is off. ' +
-                            //  'Please switch this on and try again. We require access to your location in order to pin the sighting.');
-                            // return false;
-                        // });
-
-                // this.diagnostic.isLocationAuthorized()
-                //     .then(() => this.hideBlockingPopover(),
-                //         () => {
-                            //  this.showBlockingPopover('We see that you have declined access to your location. ' +
-                            //  'We need this access in order to pin the location of the sighting. Please close the app and try again.');
-                        // });
-
-                // if (enabled) {
                 this.lat = pos.coords.latitude;
                 this.lon = pos.coords.longitude;
-                // }
+
             },
                 () => {
                     console.log('Error');
-                    this.showBlockingPopover('We see that your location service is off. ');
-                    // this.diagnostic.isLocationEnabled()
-                    //     .then(() => this.hideBlockingPopover(),
-                    //         () => {
-                    //              this.showBlockingPopover('We see that your location service is off. ');
-                    //             // +
-                    //             'Please switch this on and try again. We require access to your location in order to pin the sighting.');
-                    //             return false;
-                    //         });
+                    this.showBlockingPopover('We see that your location service is off. '
+                        + 'Please switch this on and try again. We require access to your location in order to pin the sighting.');
                 });
 
             this.manageStorage.getAllAvailableLionIds().then(result => {
@@ -228,16 +203,8 @@ export class CaptureSightingPage {
     }
 
     saveSighting() {
-        // let latitude = 0;
-        // let longitude = 0;
-
-        // this.geolocation.getCurrentPosition().then((resp) => {
-        //     latitude = resp.coords.latitude;
-        //     longitude = resp.coords.longitude;
         this.watching.unsubscribe();
-        if (!this.sightingForm.valid) {
-            // console.log(this.sightingForm.value);
-        } else {
+        if (this.sightingForm.valid) {
             this.presentLoading();
 
             let newSighting: Sighting;
@@ -279,9 +246,6 @@ export class CaptureSightingPage {
                 });
             });
         }
-        // }).catch((error) => {
-        //     console.log('Error getting location', error);
-        // });
 
     }
 
