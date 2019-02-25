@@ -98,5 +98,8 @@
     <plugin name="cordova-plugin-geolocation" spec="4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="We require access to your location to pin the sightings you see." />
     </plugin>
+    <edit-config target="NSLocationWhenInUseUsageDescription" file="*-Info.plist" mode="merge">
+        <string>We require access to your location to pin the sightings you see.</string>
+    </edit-config>
     <engine name="ios" spec="4.5.5" />
 </widget>
