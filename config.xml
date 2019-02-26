@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="39THJ3L9V7.com.sightings.lion" version="0.1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="39THJ3L9V7.com.sightings.lion" version="1.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Lion Sightings</name>
     <description>This is an app made for a research study on lions</description>
     <author email="dirkooden@gmail.com">Dirko Odendaal</author>
@@ -82,24 +82,24 @@
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
         <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
     </platform>
+    <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+        <string>We require access to your location to pin the sightings you see.</string>
+    </edit-config>
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.1.3" />
-    <plugin name="cordova-plugin-splashscreen" spec="~5.0.2" />
-    <plugin name="cordova-plugin-ionic-webview" spec="^2.3.1" />
-    <plugin name="cordova-plugin-telerik-imagepicker" spec="2.2.3">
-        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="We require access to your photo library to load pictures of lions from there." />
+    <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
+    <plugin name="cordova-plugin-ionic-webview" spec="^2.3.3" />
+    <plugin name="cordova-plugin-telerik-imagepicker" spec="^2.2.3">
+        <variable name="PHOTO_LIBRARY_USAGE_DESCRIPTION" value="Upload catch images" />
     </plugin>
-    <plugin name="cordova-plugin-crop" spec="0.4.0" />
-    <plugin name="cordova-plugin-camera" spec="4.0.3" />
-    <plugin name="cordova-plugin-file" spec="6.0.1" />
-    <plugin name="cordova-plugin-actionsheet" spec="2.3.3" />
-    <plugin name="cordova-plugin-geolocation" spec="4.0.1">
+    <plugin name="cordova-plugin-crop" spec="~0.4.0" />
+    <plugin name="cordova-plugin-camera" spec="~4.0.3" />
+    <plugin name="cordova-plugin-file" spec="~6.0.1" />
+    <plugin name="cordova-plugin-actionsheet" spec="~2.3.3" />
+    <plugin name="cordova-plugin-geolocation" spec="~4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="We require access to your location to pin the sightings you see." />
     </plugin>
-    <edit-config target="NSLocationWhenInUseUsageDescription" file="*-Info.plist" mode="merge">
-        <string>We require access to your location to pin the sightings you see.</string>
-    </edit-config>
-    <engine name="ios" spec="4.5.5" />
+    <engine name="ios" spec="~4.5.5" />
 </widget>
