@@ -96,17 +96,20 @@ export class CaptureSightingPage {
                 });
             });
 
-            this.diagnostic.isLocationEnabled().then(() => this.hideBlocker(), () => {
-                this.showBlockingPopover('We see that your location service is off. '
+            this.diagnostic.isLocationEnabled().then(() => {
+                this.hideBlocker();
+                this.diagnostic.isLocationAuthorized().then(() => this.hideBlocker(), () => {
+                    this.showBlockingPopover('Y1ou have not given us access to your location. '
+                        + 'Please authorize access as we require access to your location in order to pin the sighting.');
+                }).catch(() => this.showBlockingPopover('2You have not given us access to your location. '
+                    + 'Please authorize access as we require access to your location in order to pin the sighting.'));
+
+            }, () => {
+                this.showBlockingPopover('1We see that your location service is off. '
                     + 'Please switch this on and try again. We require access to your location in order to pin the sighting.');
-            }).catch(() => this.showBlockingPopover('We see that your location service is off. '
+            }).catch(() => this.showBlockingPopover('2We see that your location service is off. '
                 + 'Please switch this on and try again. We require access to your location in order to pin the sighting.'));
 
-                this.diagnostic.isLocationAuthorized().then(() => this.hideBlocker(), () => {
-                    this.showBlockingPopover('You have not given us access to your location. '
-                        + 'Please authorize access as we require access to your location in order to pin the sighting.');
-                }).catch(() => this.showBlockingPopover('You have not given us access to your location. '
-                + 'Please authorize access as we require access to your location in order to pin the sighting.'));
 
         });
     }
