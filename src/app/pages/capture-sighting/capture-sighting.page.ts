@@ -79,7 +79,7 @@ export class CaptureSightingPage {
         this.platform.ready().then(() => {
 
             this.watching = this.geolocation.watchPosition().subscribe(pos => {
-
+                this.hideBlocker();
                 this.lat = pos.coords.latitude;
                 this.lon = pos.coords.longitude;
 
@@ -96,6 +96,17 @@ export class CaptureSightingPage {
                 });
             });
 
+            this.diagnostic.isLocationEnabled().then(() => this.hideBlocker(), () => {
+                this.showBlockingPopover('We see that your location service is off. '
+                    + 'Please switch this on and try again. We require access to your location in order to pin the sighting.');
+            }).catch(() => this.showBlockingPopover('We see that your location service is off. '
+                + 'Please switch this on and try again. We require access to your location in order to pin the sighting.'));
+
+                this.diagnostic.isLocationAuthorized().then(() => this.hideBlocker(), () => {
+                    this.showBlockingPopover('You have not given us access to your location. '
+                        + 'Please authorize access as we require access to your location in order to pin the sighting.');
+                }).catch(() => this.showBlockingPopover('You have not given us access to your location. '
+                + 'Please authorize access as we require access to your location in order to pin the sighting.'));
 
         });
     }
@@ -120,6 +131,10 @@ export class CaptureSightingPage {
             this.blockShown = true;
             await popover.present();
         }
+    }
+
+    async hideBlocker() {
+        await this.popover.dismiss();
     }
 
     displayCard() {
