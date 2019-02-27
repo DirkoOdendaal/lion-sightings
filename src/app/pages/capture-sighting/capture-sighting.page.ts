@@ -12,10 +12,10 @@ import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { Crop } from '@ionic-native/crop/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Dialogs } from '@ionic-native/dialogs/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Sighting, Photo } from 'src/app/models';
 import { Router } from '@angular/router';
-
-import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 
 import fixOrientation from 'fix-orientation';
 /**
@@ -56,7 +56,8 @@ export class CaptureSightingPage {
         public manageStorage: ManageStorage,
         public geolocation: Geolocation,
         public platform: Platform,
-        public diagnostic: Diagnostic) {
+        public diagnostic: Diagnostic,
+        private dialogs: Dialogs) {
 
         this.sightingForm = formBuilder.group({
             temperature: [0, Validators.compose([Validators.required])],
@@ -213,7 +214,15 @@ export class CaptureSightingPage {
                     .then((newImage) => {
                         this.photosUrls.push(newImage);
                     });
-            });
+            }).catch(() => this.showCameraError());
+    }
+
+    showCameraError() {
+        this.dialogs.alert(
+            'The Settings page for the app will now open. Select \"Camera\" and enable access ' +
+            'then return to this app via the Home screen',
+            'Opening Settings page'
+        ).then(() => this.diagnostic.switchToSettings);
     }
 
     saveSighting() {

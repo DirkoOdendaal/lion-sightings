@@ -66,7 +66,7 @@ export class TestsPage {
     confirmCallback(i) {
         if (i === 1) {
             this.dialogs.alert(
-                'The Settings page for the app will now open. Select \"Location\" and set it to \"Always\"' +
+                'The Settings page for the app will now open. Select \"Location\" and set it to \"While Using\"' +
                 'then return to this app via the Home screen',
                 'Opening Settings page'
             ).then(() => this.diagnostic.switchToSettings);
@@ -137,7 +137,15 @@ export class TestsPage {
                     .then((newImage) => {
                         console.log(newImage);
                     });
-            });
+            }).catch(() => this.showCameraError());
+    }
+
+    showCameraError() {
+        this.dialogs.alert(
+            'The Settings page for the app will now open. Select \"Camera\" and enable access ' +
+            'then return to this app via the Home screen',
+            'Opening Settings page'
+        ).then(() => this.diagnostic.switchToSettings);
     }
 
     async showBlockingPopover(message) {
