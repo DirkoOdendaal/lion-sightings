@@ -21,7 +21,7 @@
         <ion-item>
             <ion-label position="stacked">Temperature</ion-label>
             <ion-select formControlName="temperature" value="0" ok-text="Okay" cancel-text="Dismiss">
-                
+
                 <ion-select-option value="60">60</ion-select-option>
                 <ion-select-option value="59">59</ion-select-option>
                 <ion-select-option value="58">58</ion-select-option>
@@ -103,7 +103,7 @@
                 <ion-select-option value="-18">-18</ion-select-option>
                 <ion-select-option value="-19">-19</ion-select-option>
                 <ion-select-option value="-20">-20</ion-select-option>
-                
+
             </ion-select>
         </ion-item>
         <ion-item>
@@ -209,13 +209,18 @@
         <ion-item>
             <ion-label position="stacked">Images</ion-label>
             <div>
+                <ion-button color="secondary" type="button" (click)="takePicture()">
+                    Attach media
+                </ion-button>
+            </div>
+            <div>
                 <input class="inputfile inputfile-1" id="file-1" name="file-1[]" type="file" accept="image/*"
-                    capture="camera" (change)="uploadFiles($event)"/>
+                    capture="camera" (change)="uploadFiles($event)" />
                 <label for="file-1"> <span>Attach photos</span></label>
             </div>
             <div>
-                <input class="inputfile inputfile-1" id="file-2" name="file-2[]" type="file" accept="video/*"
-                    multiple (change)="uploadFiles($event)"/>
+                <input class="inputfile inputfile-1" id="file-2" name="file-2[]" type="file" accept="video/*" multiple
+                    (change)="uploadFiles($event)" />
                 <label for="file-2"> <span>Attach videos</span></label>
             </div>
         </ion-item>
@@ -232,6 +237,6 @@
         <ion-button expand="block" aria-label="Save sighting" type="submit">
             Save sighting
         </ion-button>
-
+        <br />
     </form>
 </ion-content>

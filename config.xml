@@ -103,4 +103,5 @@
     </plugin>
     <plugin name="cordova.plugins.diagnostic" spec="4.0.11" />
     <engine name="ios" spec="4.5.5" />
+    <plugin name="cordova-plugin-dialogs" spec="2.0.1" />
 </widget>

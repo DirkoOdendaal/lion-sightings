@@ -15,6 +15,7 @@ import { File } from '@ionic-native/file/ngx';
 import { ActionSheet } from '@ionic-native/action-sheet/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 
 import { AppComponent } from './app.component';
@@ -77,6 +78,7 @@ import { OnlineManagerService } from './services/online-manager.service';
     LocalStorageProvider,
     ManageStorage,
     Diagnostic,
+    Dialogs,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

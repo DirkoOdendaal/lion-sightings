@@ -3,6 +3,9 @@ import { Platform, AlertController, LoadingController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Database } from '../../providers/database.provider';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { Dialogs } from '@ionic-native/dialogs/ngx';
+import { Crop } from '@ionic-native/crop/ngx';
+import { Camera } from '@ionic-native/camera/ngx';
 
 @Component({
     selector: 'page-tests',
@@ -12,25 +15,62 @@ export class TestsPage {
 
     loading: any;
     isLoading = true;
+    blockShown = false;
+    popover;
 
     constructor(private database: Database,
         private platform: Platform,
         private alertController: AlertController,
         private geolocation: Geolocation,
         private loadingController: LoadingController,
-        private diagnostic: Diagnostic) {
+        private diagnostic: Diagnostic,
+        private dialogs: Dialogs,
+        public cropService: Crop,
+        public camera: Camera) {
 
-            // this.diagnostic.isLocationAuthorized()
-            // .then(success => this.showSuccessAlert('startup', 'Granted'),
-            // error => this.showErrorAlert('startup', 'Location service is not authorized'));
+        this.platform.ready().then(() => {
+            this.checkStatus();
+        });
 
-            // this.diagnostic.isLocationAvailable()
-            // .then(success => this.showSuccessAlert('startup', 'Available'),
-            // error => this.showErrorAlert('startup', 'Location service is not available'));
+        this.platform.resume.subscribe(() => this.checkStatus);
+    }
 
-            // this.diagnostic.isLocationEnabled()
-            // .then(success => this.showSuccessAlert('startup', 'Enabled'),
-            //  error => this.showErrorAlert('startup', 'Location service is not enabled'));
+    onError(error) {
+        console.error('The following error occurred: ' + error);
+    }
+
+    checkStatus() {
+        this.diagnostic.getLocationAuthorizationStatus().then(status => {
+            switch (status) {
+                case this.diagnostic.permissionStatus.NOT_REQUESTED:
+                    console.log('Permission not requested');
+                    this.diagnostic.requestLocationAuthorization().then(this.checkStatus, this.onError);
+                    break;
+                case this.diagnostic.permissionStatus.DENIED:
+                    console.log('Permission denied');
+                    this.dialogs.confirm(
+                        'The app has been denied permission to use location but requires it because blah.' +
+                        '\nWould you like to open the Settings page to manually allow location for the app?',
+                        'Location permission is required', [
+                            'Yes',
+                            'No'
+                        ]).then(() => this.confirmCallback);
+                    break;
+                case this.diagnostic.permissionStatus.GRANTED:
+                    console.log('Permission granted always');
+                    break;
+            }
+        }, this.onError);
+    }
+
+    confirmCallback(i) {
+        if (i === 1) {
+            this.dialogs.alert(
+                'The Settings page for the app will now open. Select \"Location\" and set it to \"Always\"' +
+                'then return to this app via the Home screen',
+                'Opening Settings page'
+            ).then(() => this.diagnostic.switchToSettings);
+        }
     }
 
     test1() {
@@ -64,9 +104,64 @@ export class TestsPage {
         this.showSuccessAlert('test3', 'Okay, so the button works');
     }
 
-    test5() {
-
+    test4() {
+        const options = {
+            quality: 100,
+            correctOrientation: true,
+            saveToPhotoAlbum: true,
+            allowEdit: true,
+            mediaType: this.camera.MediaType.PICTURE
+        };
+        this.camera.getPicture(options)
+            .then((data) => {
+                this.cropService
+                    .crop(data, { quality: 75 })
+                    .then((newImage) => {
+                        console.log(newImage);
+                    });
+            });
     }
+
+    test5() {
+        const options = {
+            quality: 100,
+            correctOrientation: true,
+            saveToPhotoAlbum: true,
+            allowEdit: true,
+            mediaType: this.camera.MediaType.ALLMEDIA
+        };
+        this.camera.getPicture(options)
+            .then((data) => {
+                this.cropService
+                    .crop(data, { quality: 75 })
+                    .then((newImage) => {
+                        console.log(newImage);
+                    });
+            });
+    }
+
+    async showBlockingPopover(message) {
+        this.popover = await this.alertController.create({
+            backdropDismiss: false,
+            keyboardClose: true,
+            header: 'Ohh snap!!',
+            message: message
+        });
+        return this.showBlocker(this.popover);
+    }
+
+    async showBlocker(popover) {
+        if (!this.blockShown) {
+            this.blockShown = true;
+            await popover.present();
+        }
+    }
+
+    async hideBlocker() {
+        this.blockShown = false;
+        await this.popover.dismiss();
+    }
+
 
     async showSuccessAlert(test: string, message: string) {
         const alert = await this.alertController.create({
