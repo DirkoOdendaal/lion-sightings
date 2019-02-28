@@ -87,13 +87,12 @@ export class CaptureSightingPage {
                 this.lon = pos.coords.longitude;
 
             },
-                () => this.dialogs.confirm(
+                () => this.dialogs.alert(
                     'The app has been denied permission to use location but requires it to pin the sighting location.' +
-                    '\nWould you like to open the Settings page to manually allow location for the app?',
-                    'Location permission is required', [
-                        'Yes',
-                        'No'
-                    ]).then((val) => this.confirmCallback(val)));
+                    'The Settings page for the app will now open. Select \"Location\" and set it to \"While Using\"' +
+                    'then return to this app via the Home screen',
+                    'Location permission is required'
+                ).then(() => this.diagnostic.switchToSettings));
 
             this.manageStorage.getAllAvailableLionIds().then(result => {
                 result.forEach(element => {
@@ -128,13 +127,12 @@ export class CaptureSightingPage {
                     break;
                 case this.diagnostic.permissionStatus.DENIED:
                     console.log('Permission denied');
-                    this.dialogs.confirm(
-                        'The app has been denied permission to use location but requires it to pin the sighting location.' +
-                        '\nWould you like to open the Settings page to manually allow location for the app?',
-                        'Location permission is required', [
-                            'Yes',
-                            'No'
-                        ]).then((val) => this.confirmCallback(val));
+                        this.dialogs.alert(
+                            'The app has been denied permission to use location but requires it to pin the sighting location.' +
+                            'The Settings page for the app will now open. Select \"Location\" and set it to \"While Using\"' +
+                            'then return to this app via the Home screen',
+                            'Location permission is required'
+                        ).then(() => this.diagnostic.switchToSettings);
                     break;
                 case this.diagnostic.permissionStatus.GRANTED:
                     console.log('Permission granted always');
