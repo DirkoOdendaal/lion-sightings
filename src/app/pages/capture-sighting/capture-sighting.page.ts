@@ -289,6 +289,11 @@ export class CaptureSightingPage {
         if (this.sightingForm.valid) {
             this.presentLoading();
 
+            if (this.lat === 0 && this.lon === 0) {
+                this.checkStatus();
+                return;
+            }
+
             let newSighting: Sighting;
             this.manageStorage.getNextSightingNumber().then(number => {
 
