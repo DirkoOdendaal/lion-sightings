@@ -26,7 +26,8 @@ export class EmailService {
 
         return this.http
             .get(API_URL + '/api/Excel/getEmail/' + email_address, httpOptions)
-            .subscribe(response => Promise.resolve(response), (err: HttpErrorResponse) => this.handleError(err));
+            .toPromise()
+            .then(response => Promise.resolve(response), (err: HttpErrorResponse) => this.handleError(err));
     }
 
     private handleError(error: HttpErrorResponse) {

@@ -79,17 +79,21 @@ export class CaptureSightingPage {
         });
         this.platform.ready().then(() => {
 
+            this.checkStatus();
+
             this.watching = this.geolocation.watchPosition().subscribe(pos => {
                 this.hideBlocker();
                 this.lat = pos.coords.latitude;
                 this.lon = pos.coords.longitude;
 
             },
-                () => {
-                    console.log('Error');
-                    this.showBlockingPopover('We see that your location service is off. '
-                        + 'Please switch this on and try again. We require access to your location in order to pin the sighting.');
-                });
+                () => this.dialogs.confirm(
+                    'The app has been denied permission to use location but requires it to pin the sighting location.' +
+                    '\nWould you like to open the Settings page to manually allow location for the app?',
+                    'Location permission is required', [
+                        'Yes',
+                        'No'
+                    ]).then((val) => this.confirmCallback(val)));
 
             this.manageStorage.getAllAvailableLionIds().then(result => {
                 result.forEach(element => {
@@ -97,21 +101,57 @@ export class CaptureSightingPage {
                 });
             });
 
-            this.diagnostic.isLocationEnabled().then((res) => {
-                this.hideBlocker();
-                if (res === true) {
-                    this.diagnostic.isLocationAuthorized().then(() => this.hideBlocker(), () => {
-                        this.showBlockingPopover('You have not given us access to your location. '
-                            + 'Please authorize access as we require access to your location in order to pin the sighting.');
-                    });
-                }
-            }, () => {
-                this.showBlockingPopover('We see that your location service is off. '
-                    + 'Please switch this on and try again. We require access to your location in order to pin the sighting.');
-            });
-
-
+            // this.diagnostic.isLocationEnabled().then((res) => {
+            //     this.hideBlocker();
+            //     if (res === true) {
+            //         this.diagnostic.isLocationAuthorized().then(() => this.hideBlocker(), () => {
+            //             this.showBlockingPopover('You have not given us access to your location. '
+            //                 + 'Please authorize access as we require access to your location in order to pin the sighting.');
+            //         });
+            //     }
+            // }, () => {
+            //     this.showBlockingPopover('We see that your location service is off. '
+            //         + 'Please switch this on and try again. We require access to your location in order to pin the sighting.');
+            // });
         });
+
+        this.platform.resume.subscribe(() => this.checkStatus);
+    }
+
+    checkStatus() {
+        this.diagnostic.getLocationAuthorizationStatus().then(status => {
+            this.hideBlocker();
+            switch (status) {
+                case this.diagnostic.permissionStatus.NOT_REQUESTED:
+                    console.log('Permission not requested');
+                    this.diagnostic.requestLocationAuthorization().then(this.checkStatus, this.showBlockingPopover);
+                    break;
+                case this.diagnostic.permissionStatus.DENIED:
+                    console.log('Permission denied');
+                    this.dialogs.confirm(
+                        'The app has been denied permission to use location but requires it to pin the sighting location.' +
+                        '\nWould you like to open the Settings page to manually allow location for the app?',
+                        'Location permission is required', [
+                            'Yes',
+                            'No'
+                        ]).then((val) => this.confirmCallback(val));
+                    break;
+                case this.diagnostic.permissionStatus.GRANTED:
+                    console.log('Permission granted always');
+                    break;
+            }
+        }, this.showBlockingPopover);
+    }
+
+    confirmCallback(i) {
+        if (i === 1) {
+            this.dialogs.alert(
+                'The Settings page for the app will now open. Select \"Location\" and set it to \"While Using\"' +
+                'then return to this app via the Home screen',
+                'Opening Settings page'
+            ).then(() => this.diagnostic.switchToSettings,
+            () => this.checkStatus);
+        }
     }
 
 
@@ -205,7 +245,7 @@ export class CaptureSightingPage {
             correctOrientation: true,
             saveToPhotoAlbum: true,
             allowEdit: true,
-            mediaType: this.camera.MediaType.ALLMEDIA
+            mediaType: this.camera.MediaType.PICTURE
         };
         this.camera.getPicture(options)
             .then((data) => {
@@ -214,7 +254,28 @@ export class CaptureSightingPage {
                     .then((newImage) => {
                         this.photosUrls.push(newImage);
                     });
-            }).catch(() => this.showCameraError());
+            },
+            () => this.showCameraError());
+    }
+
+    uploadMedia () {
+        const options = {
+            quality: 100,
+            correctOrientation: true,
+            saveToPhotoAlbum: true,
+            allowEdit: true,
+            mediaType: this.camera.MediaType.ALLMEDIA,
+            sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
+        };
+        this.camera.getPicture(options)
+            .then((data) => {
+                this.cropService
+                    .crop(data, { quality: 75 })
+                    .then((newImage) => {
+                        this.photosUrls.push(newImage);
+                    },
+                    () => this.showCameraError());
+            });
     }
 
     showCameraError() {

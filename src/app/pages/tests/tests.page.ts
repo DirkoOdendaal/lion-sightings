@@ -49,12 +49,12 @@ export class TestsPage {
                 case this.diagnostic.permissionStatus.DENIED:
                     console.log('Permission denied');
                     this.dialogs.confirm(
-                        'The app has been denied permission to use location but requires it because blah.' +
+                        'The app has been denied permission to use location but requires it to pin the sighting location.' +
                         '\nWould you like to open the Settings page to manually allow location for the app?',
                         'Location permission is required', [
                             'Yes',
                             'No'
-                        ]).then(() => this.confirmCallback);
+                        ]).then((val) => this.confirmCallback(val));
                     break;
                 case this.diagnostic.permissionStatus.GRANTED:
                     console.log('Permission granted always');
@@ -69,7 +69,8 @@ export class TestsPage {
                 'The Settings page for the app will now open. Select \"Location\" and set it to \"While Using\"' +
                 'then return to this app via the Home screen',
                 'Opening Settings page'
-            ).then(() => this.diagnostic.switchToSettings);
+            ).then(() => this.diagnostic.switchToSettings,
+            () => this.checkStatus);
         }
     }
 
@@ -91,7 +92,15 @@ export class TestsPage {
             .then(val => {
                 this.dismisLoading();
                 this.showSuccessAlert('test2', val.coords.latitude.toString() + ' ' + val.coords.longitude.toString());
-            })
+            },
+             () =>this.dialogs.confirm(
+                'The app has been denied permission to use location but requires it to pin the sighting location.' +
+                '\nWould you like to open the Settings page to manually allow location for the app?',
+                'Location permission is required', [
+                    'Yes',
+                    'No'
+                ]).then((val) => this.confirmCallback(val))
+                )
             .catch(err => {
                 this.dismisLoading();
                 console.log(err);
@@ -128,7 +137,8 @@ export class TestsPage {
             correctOrientation: true,
             saveToPhotoAlbum: true,
             allowEdit: true,
-            mediaType: this.camera.MediaType.ALLMEDIA
+            mediaType: this.camera.MediaType.ALLMEDIA,
+            sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
         };
         this.camera.getPicture(options)
             .then((data) => {
@@ -136,8 +146,9 @@ export class TestsPage {
                     .crop(data, { quality: 75 })
                     .then((newImage) => {
                         console.log(newImage);
-                    });
-            }).catch(() => this.showCameraError());
+                    },
+                    () => this.showCameraError());
+            });
     }
 
     showCameraError() {

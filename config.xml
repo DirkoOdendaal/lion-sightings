@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.sightings.lion" version="1.0.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.sightings.lion" version="1.0.9" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Lion Sightings</name>
     <description>This is an app made for a research study on lions</description>
     <author email="dirkooden@gmail.com">Dirko Odendaal</author>
@@ -82,9 +82,6 @@
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
         <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
     </platform>
-    <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
-        <string>We require access to your location to pin the sightings you see.</string>
-    </edit-config>
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
     <plugin name="cordova-plugin-device" spec="^2.0.2" />
@@ -102,6 +99,6 @@
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="We require access to your location to pin the sightings you see." />
     </plugin>
     <plugin name="cordova.plugins.diagnostic" spec="4.0.11" />
-    <engine name="ios" spec="4.5.5" />
     <plugin name="cordova-plugin-dialogs" spec="2.0.1" />
+    <engine name="ios" spec="^4.5.5" />
 </widget>
