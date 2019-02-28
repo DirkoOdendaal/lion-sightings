@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.sightings.lion" version="1.0.10" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.sightings.lion" version="1.0.12" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Lion Sightings</name>
     <description>This is an app made for a research study on lions</description>
     <author email="dirkooden@gmail.com">Dirko Odendaal</author>
@@ -101,4 +101,5 @@
     <plugin name="cordova.plugins.diagnostic" spec="4.0.11" />
     <plugin name="cordova-plugin-dialogs" spec="2.0.1" />
     <engine name="ios" spec="^4.5.5" />
+    <plugin name="cordova-open-native-settings" spec="1.5.2" />
 </widget>

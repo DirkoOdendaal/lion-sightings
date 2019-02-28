@@ -92,7 +92,7 @@ export class CaptureSightingPage {
                     'The Settings page for the app will now open. Select \"Location\" and set it to \"While Using\"' +
                     'then return to this app via the Home screen',
                     'Location permission is required'
-                ).then(() => this.diagnostic.switchToSettings));
+                ).then(() => this.diagnostic.switchToSettings()));
 
             this.manageStorage.getAllAvailableLionIds().then(result => {
                 result.forEach(element => {
@@ -114,7 +114,7 @@ export class CaptureSightingPage {
             // });
         });
 
-        this.platform.resume.subscribe(() => this.checkStatus);
+        this.platform.resume.subscribe(() => this.checkStatus());
     }
 
     checkStatus() {
@@ -123,7 +123,7 @@ export class CaptureSightingPage {
             switch (status) {
                 case this.diagnostic.permissionStatus.NOT_REQUESTED:
                     console.log('Permission not requested');
-                    this.diagnostic.requestLocationAuthorization().then(this.checkStatus, this.showBlockingPopover);
+                    this.diagnostic.requestLocationAuthorization().then(() => this.checkStatus(), this.showBlockingPopover);
                     break;
                 case this.diagnostic.permissionStatus.DENIED:
                     console.log('Permission denied');
@@ -132,7 +132,7 @@ export class CaptureSightingPage {
                             'The Settings page for the app will now open. Select \"Location\" and set it to \"While Using\"' +
                             'then return to this app via the Home screen',
                             'Location permission is required'
-                        ).then(() => this.diagnostic.switchToSettings);
+                        ).then(() => this.diagnostic.switchToSettings());
                     break;
                 case this.diagnostic.permissionStatus.GRANTED:
                     console.log('Permission granted always');
@@ -147,8 +147,8 @@ export class CaptureSightingPage {
                 'The Settings page for the app will now open. Select \"Location\" and set it to \"While Using\"' +
                 'then return to this app via the Home screen',
                 'Opening Settings page'
-            ).then(() => this.diagnostic.switchToSettings,
-            () => this.checkStatus);
+            ).then(() => this.diagnostic.switchToSettings(),
+            () => this.checkStatus());
         }
     }
 
@@ -281,7 +281,7 @@ export class CaptureSightingPage {
             'The Settings page for the app will now open. Select \"Camera\" and enable access ' +
             'then return to this app via the Home screen',
             'Opening Settings page'
-        ).then(() => this.diagnostic.switchToSettings);
+        ).then(() => this.diagnostic.switchToSettings());
     }
 
     saveSighting() {
