@@ -45,6 +45,7 @@
         <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
         <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+        <preference name="AndroidPersistentFileLocation" value="Compatibility" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
@@ -100,6 +101,7 @@
     </plugin>
     <plugin name="cordova.plugins.diagnostic" spec="4.0.11" />
     <plugin name="cordova-plugin-dialogs" spec="2.0.1" />
-    <engine name="ios" spec="^4.5.5" />
     <plugin name="cordova-open-native-settings" spec="1.5.2" />
+    <engine name="ios" spec="^4.5.5" />
+    <engine name="android" spec="^7.1.4" />
 </widget>
