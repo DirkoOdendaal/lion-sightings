@@ -16,6 +16,7 @@ import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Sighting, Photo } from 'src/app/models';
 import { Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import fixOrientation from 'fix-orientation';
 /**
@@ -57,7 +58,8 @@ export class CaptureSightingPage {
         public geolocation: Geolocation,
         public platform: Platform,
         public diagnostic: Diagnostic,
-        private dialogs: Dialogs) {
+        private dialogs: Dialogs,
+        private DomSanitizer: DomSanitizer) {
 
         this.sightingForm = formBuilder.group({
             temperature: [0, Validators.compose([Validators.required])],
@@ -241,39 +243,34 @@ export class CaptureSightingPage {
         const options = {
             quality: 100,
             correctOrientation: true,
-            saveToPhotoAlbum: true,
-            allowEdit: true,
+            destinationType: this.camera.DestinationType.FILE_URI,
             mediaType: this.camera.MediaType.PICTURE
         };
         this.camera.getPicture(options)
             .then((data) => {
-                this.cropService
-                    .crop(data, { quality: 75 })
-                    .then((newImage) => {
-                        this.photosUrls.push(newImage);
-                    });
-            },
-            () => this.showCameraError());
+                    var correctPath = data.substr(0, data.lastIndexOf('/') + 1);
+                    this.photosUrls.push(correctPath);
+            }, () => this.showCameraPhotoError());
+            this.camera.cleanup();
     }
 
     uploadMedia () {
         const options = {
             quality: 100,
             correctOrientation: true,
-            saveToPhotoAlbum: true,
-            allowEdit: true,
             mediaType: this.camera.MediaType.ALLMEDIA,
+            destinationType: this.camera.DestinationType.FILE_URI,
             sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
         };
         this.camera.getPicture(options)
             .then((data) => {
-                this.cropService
-                    .crop(data, { quality: 75 })
-                    .then((newImage) => {
-                        this.photosUrls.push(newImage);
-                    },
-                    () => this.showCameraError());
-            });
+                var base64Image = 'data:image/jpeg;base64,' +  data;
+                    this.photosUrls.push(base64Image);
+            }, () => this.showCameraPhotoError());
+    }
+
+    showCameraPhotoError() {
+        this.alertPopUp('Sorry, we are having a problem accessing the photo you are trying to add.');
     }
 
     showCameraError() {
