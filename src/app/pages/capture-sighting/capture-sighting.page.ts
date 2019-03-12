@@ -58,8 +58,8 @@ export class CaptureSightingPage {
         public geolocation: Geolocation,
         public platform: Platform,
         public diagnostic: Diagnostic,
-        private dialogs: Dialogs,
-        private DomSanitizer: DomSanitizer) {
+        public dialogs: Dialogs,
+        public domSanitizer: DomSanitizer) {
 
         this.sightingForm = formBuilder.group({
             temperature: [0, Validators.compose([Validators.required])],
@@ -243,13 +243,12 @@ export class CaptureSightingPage {
         const options = {
             quality: 100,
             correctOrientation: true,
-            destinationType: this.camera.DestinationType.FILE_URI,
+            destinationType: this.camera.DestinationType.DATA_URL,
             mediaType: this.camera.MediaType.PICTURE
         };
         this.camera.getPicture(options)
             .then((data) => {
-                    var correctPath = data.substr(0, data.lastIndexOf('/') + 1);
-                    this.photosUrls.push(correctPath);
+                this.manageOrientation(data);
             }, () => this.showCameraPhotoError());
             this.camera.cleanup();
     }
@@ -259,14 +258,29 @@ export class CaptureSightingPage {
             quality: 100,
             correctOrientation: true,
             mediaType: this.camera.MediaType.ALLMEDIA,
-            destinationType: this.camera.DestinationType.FILE_URI,
+            destinationType: this.camera.DestinationType.DATA_URL,
             sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
         };
         this.camera.getPicture(options)
             .then((data) => {
-                var base64Image = 'data:image/jpeg;base64,' +  data;
-                    this.photosUrls.push(base64Image);
+                this.manageOrientation(data);
             }, () => this.showCameraPhotoError());
+    }
+
+    manageOrientation(data) {
+            const base64 = 'data:image/jpeg;base64,' + data;
+
+                // FIXING ORIENTATION USING NPM PLUGIN fix-orientation
+                fixOrientation(base64, { image: true }, (fixed: string, image: any) => {
+                    // fixed IS THE NEW VERSION FOR DISPLAY PURPOSES
+                    this.imgDisplay.push(fixed);
+                    const newPhoto: Photo = {
+                        name: '',
+                        file: fixed
+                    };
+                    this.photos.push(newPhoto);
+                    this.photoCounter++;
+                });
     }
 
     showCameraPhotoError() {
@@ -350,6 +364,7 @@ export class CaptureSightingPage {
     }
 
     async alertPopUp(error) {
+        console.log(error);
         const alert = await this.alertCtrl.create({
             message: error.message,
             buttons: [
