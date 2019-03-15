@@ -3,10 +3,8 @@
 
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Headers, Response, RequestOptions } from '@angular/http';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiUrl;

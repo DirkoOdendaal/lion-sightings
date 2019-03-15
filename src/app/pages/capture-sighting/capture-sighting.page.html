@@ -223,7 +223,7 @@
             <ion-row>
                 <ion-col col-3 col-md-3 col-xl-3 *ngFor="let photo of imgDisplay">
                     <ion-thumbnail>
-                        <img [src]="photo" alt="sighting photos"/>
+                        <img [src]="domSanitizer.bypassSecurityTrustUrl(photo)" alt="sighting photos"/>
                     </ion-thumbnail>
                 </ion-col>
             </ion-row>
