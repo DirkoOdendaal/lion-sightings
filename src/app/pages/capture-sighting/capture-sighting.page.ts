@@ -256,8 +256,6 @@ export class CaptureSightingPage {
     uploadMedia () {
         const options = {
             quality: 100,
-            correctOrientation: true,
-            mediaType: this.camera.MediaType.ALLMEDIA,
             destinationType: this.camera.DestinationType.DATA_URL,
             sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
         };

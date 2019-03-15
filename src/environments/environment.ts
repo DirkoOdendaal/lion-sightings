@@ -12,7 +12,7 @@ export const environment = {
     storageBucket: 'lion-sightings.appspot.com',
     messagingSenderId: '113147914649'
   },
-  apiUrl: 'https://34.76.212.212'
+  apiUrl: 'http://34.76.212.212'
 };
 
 /*
