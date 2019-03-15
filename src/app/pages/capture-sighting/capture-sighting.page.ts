@@ -240,31 +240,32 @@ export class CaptureSightingPage {
     }
 
     takePicture() {
+        this.presentLoading();
         const options = {
             quality: 100,
-            correctOrientation: true,
             destinationType: this.camera.DestinationType.DATA_URL,
+            encodingType: this.camera.EncodingType.JPEG,
+            sourceType: this.camera.PictureSourceType.CAMERA,
             mediaType: this.camera.MediaType.PICTURE
         };
         this.camera.getPicture(options)
             .then((data) => {
                 this.manageOrientation(data);
-            }, () => this.showCameraPhotoError());
+            });
             this.camera.cleanup();
     }
 
     uploadMedia () {
+        this.presentLoading();
         const options = {
             quality: 100,
-            correctOrientation: true,
-            mediaType: this.camera.MediaType.ALLMEDIA,
             destinationType: this.camera.DestinationType.DATA_URL,
             sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
         };
         this.camera.getPicture(options)
             .then((data) => {
                 this.manageOrientation(data);
-            }, () => this.showCameraPhotoError());
+            });
     }
 
     manageOrientation(data) {
@@ -280,11 +281,8 @@ export class CaptureSightingPage {
                     };
                     this.photos.push(newPhoto);
                     this.photoCounter++;
+                    this.dismisLoading();
                 });
-    }
-
-    showCameraPhotoError() {
-        this.alertPopUp('Sorry, we are having a problem accessing the photo you are trying to add.');
     }
 
     showCameraError() {
@@ -297,9 +295,8 @@ export class CaptureSightingPage {
 
     saveSighting() {
         this.watching.unsubscribe();
+        this.presentLoading();
         if (this.sightingForm.valid) {
-            this.presentLoading();
-
             if (this.lat === 0 && this.lon === 0) {
                 this.checkStatus();
                 return;
@@ -361,19 +358,5 @@ export class CaptureSightingPage {
     async dismisLoading() {
         this.isLoading = false;
         return await this.loadingCtrl.dismiss();
-    }
-
-    async alertPopUp(error) {
-        console.log(error);
-        const alert = await this.alertCtrl.create({
-            message: error.message,
-            buttons: [
-                {
-                    text: 'Ok',
-                    role: 'cancel'
-                }
-            ]
-        });
-        alert.present();
     }
 }

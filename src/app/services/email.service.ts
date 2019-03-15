@@ -3,10 +3,8 @@
 
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Headers, Response, RequestOptions } from '@angular/http';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 
 // we can now access environment.apiUrl
 const API_URL = environment.apiUrl;
@@ -20,7 +18,10 @@ export class EmailService {
     public requestEmail(email_address: string) {
           const httpOptions = {
             headers: new HttpHeaders({
-              'Content-Type':  'application/json'
+              'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+              'Accept-Encoding': 'gzip, deflate',
+              'Connection': 'keep-alive',
+              'Host': '34.76.212.212'
             })
           };
 
