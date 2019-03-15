@@ -29,7 +29,6 @@
     "@angular/router": "~7.1.4",
     "@angular/service-worker": "~7.1.4",
     "@ionic-native/action-sheet": "^5.2.0",
-    "@ionic-native/background-mode": "^5.2.0",
     "@ionic-native/camera": "^5.2.0",
     "@ionic-native/core": "^5.2.0",
     "@ionic-native/crop": "^5.2.0",
@@ -47,7 +46,7 @@
     "angularfire2": "^5.1.1",
     "cordova-android": "7.1.4",
     "cordova-browser": "5.0.4",
-    "cordova-ios": "^4.5.5",
+    "cordova-ios": "4.5.5",
     "cordova-open-native-settings": "1.5.2",
     "cordova-plugin-actionsheet": "^2.3.3",
     "cordova-plugin-background-mode": "0.7.2",
@@ -127,8 +126,8 @@
     },
     "platforms": [
       "browser",
-      "ios",
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
