@@ -16,7 +16,6 @@ import { ActionSheet } from '@ionic-native/action-sheet/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
-import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 
 import { AppComponent } from './app.component';
@@ -80,7 +79,6 @@ import { OnlineManagerService } from './services/online-manager.service';
     ManageStorage,
     Diagnostic,
     Dialogs,
-    BackgroundMode,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

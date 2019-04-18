@@ -29,7 +29,6 @@
     "@angular/router": "~7.1.4",
     "@angular/service-worker": "~7.1.4",
     "@ionic-native/action-sheet": "^5.2.0",
-    "@ionic-native/background-mode": "^5.2.0",
     "@ionic-native/camera": "^5.2.0",
     "@ionic-native/core": "^5.2.0",
     "@ionic-native/crop": "^5.2.0",
@@ -47,10 +46,9 @@
     "angularfire2": "^5.1.1",
     "cordova-android": "7.1.4",
     "cordova-browser": "5.0.4",
-    "cordova-ios": "^4.5.5",
+    "cordova-ios": "4.5.5",
     "cordova-open-native-settings": "1.5.2",
     "cordova-plugin-actionsheet": "^2.3.3",
-    "cordova-plugin-background-mode": "0.7.2",
     "cordova-plugin-camera": "^4.0.3",
     "cordova-plugin-crop": "^0.4.0",
     "cordova-plugin-device": "^2.0.2",
@@ -103,12 +101,12 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-telerik-imagepicker": {
-        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "Upload catch images"
+        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "We need access to your photo library in order to upload photos of the lion sighting."
       },
       "cordova-plugin-crop": {},
       "cordova-plugin-camera": {},
       "cordova-plugin-geolocation": {
-        "GEOLOCATION_USAGE_DESCRIPTION": "We require access to your location to pin the sightings you see."
+        "GEOLOCATION_USAGE_DESCRIPTION": "We need access to your location to pin the lion sighting location."
       },
       "cordova-plugin-file": {},
       "cordova-plugin-actionsheet": {},
@@ -122,13 +120,12 @@
       "cordova-plugin-ionic-keyboard": {},
       "cordova.plugins.diagnostic": {},
       "cordova-plugin-dialogs": {},
-      "cordova-open-native-settings": {},
-      "cordova-plugin-background-mode": {}
+      "cordova-open-native-settings": {}
     },
     "platforms": [
       "browser",
-      "ios",
-      "android"
+      "android",
+      "ios"
     ]
   }
 }
