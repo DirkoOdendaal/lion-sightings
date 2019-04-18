@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { User } from '../models/user.model';
 import { Database } from './database.provider';
+import { LocalStorageProvider } from './local-storage.provider';
 
 @Injectable()
 export class AuthData {
   authState = null;
 
-  constructor(public auth: AngularFireAuth, public database: Database) {
+  constructor(public auth: AngularFireAuth, public database: Database, public localStorageProvider: LocalStorageProvider) {
 
     auth.auth.onAuthStateChanged((state) => {
       this.authState = state;
@@ -25,7 +26,7 @@ export class AuthData {
    * @param  {string} password [User's password]
    */
   loginUser(email: string, password: string): Promise<any> {
-    return this.auth.auth.signInWithEmailAndPassword(email, password);
+    return this.auth.auth.setPersistence('local').then(() => this.auth.auth.signInWithEmailAndPassword(email, password));
   }
 
   /**
@@ -60,6 +61,7 @@ export class AuthData {
    * This function doesn't take any params, it just logs the current user out of the app.
    */
   logoutUser(): Promise<any> {
+    this.localStorageProvider.clearLocalData();
     return this.auth.auth.signOut();
   }
 

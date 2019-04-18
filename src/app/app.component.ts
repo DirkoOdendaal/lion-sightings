@@ -6,6 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AuthData } from './providers/auth.provider';
 import { Database } from './providers/database.provider';
+import { ManageStorage } from './providers/manage-storage.provider';
 import { Router } from '@angular/router';
 import { User } from './models/user.model';
 import { get, set } from 'idb-keyval';
@@ -47,6 +48,7 @@ export class AppComponent implements OnInit {
     private statusBar: StatusBar,
     private auth: AuthData,
     private database: Database,
+    private manageStorage: ManageStorage,
     private router: Router,
     private toastController: ToastController,
     private alertController: AlertController,
@@ -58,7 +60,7 @@ export class AppComponent implements OnInit {
 
     this.auth.auth.auth.onAuthStateChanged((state) => {
       if (state != null && state.uid != null) {
-        this.database.currentUser().subscribe(user => {
+        this.manageStorage.currentUser().subscribe(user => {
           this.checkMenu(user);
         });
       }

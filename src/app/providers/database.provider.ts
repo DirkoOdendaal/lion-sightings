@@ -47,7 +47,7 @@ export class Database {
 
     currentUser(): Observable<User> {
         if (this.db.firestore.app.auth().currentUser) {
-            const userId = this.db.firestore.app.auth().currentUser.uid;
+           const userId = this.db.firestore.app.auth().currentUser.uid;
             const user = this.db.collection('users').doc(userId).get().pipe(map(snapshot => {
                 const loggedInUser: User = {
                     user_id: snapshot.data().user_id,

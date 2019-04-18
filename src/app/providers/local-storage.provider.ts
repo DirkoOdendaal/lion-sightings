@@ -21,4 +21,8 @@ export class LocalStorageProvider {
         return this.storage.get(`${STORAGE_KEY}-${key}`);
     }
 
+    clearLocalData() {
+        this.storage.clear();
+    }
+
 }

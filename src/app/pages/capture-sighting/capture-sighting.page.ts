@@ -5,7 +5,7 @@ import {
     Platform
 } from '@ionic/angular';
 
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ManageStorage } from '../../providers/manage-storage.provider';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
@@ -29,7 +29,7 @@ import fixOrientation from 'fix-orientation';
     selector: 'page-capture-sighting',
     templateUrl: 'capture-sighting.page.html',
 })
-export class CaptureSightingPage {
+export class CaptureSightingPage implements OnDestroy  {
     @ViewChild('captureForm') formValues;
     imgDisplay = [];
     photos: Photo[] = [];
@@ -358,5 +358,9 @@ export class CaptureSightingPage {
     async dismisLoading() {
         this.isLoading = false;
         return await this.loadingCtrl.dismiss();
+    }
+
+    ngOnDestroy() {
+        this.platform.resume.unsubscribe();
     }
 }
