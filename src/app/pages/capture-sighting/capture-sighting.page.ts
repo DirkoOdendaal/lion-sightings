@@ -5,7 +5,7 @@ import {
     Platform
 } from '@ionic/angular';
 
-import { Component, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ManageStorage } from '../../providers/manage-storage.provider';
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
@@ -29,7 +29,7 @@ import fixOrientation from 'fix-orientation';
     selector: 'page-capture-sighting',
     templateUrl: 'capture-sighting.page.html',
 })
-export class CaptureSightingPage implements OnDestroy  {
+export class CaptureSightingPage implements AfterViewInit {
     @ViewChild('captureForm') formValues;
     imgDisplay = [];
     photos: Photo[] = [];
@@ -44,6 +44,7 @@ export class CaptureSightingPage implements OnDestroy  {
     lat = 0;
     lon = 0;
     watching;
+    position;
     blockShown = false;
     popover;
 
@@ -79,49 +80,39 @@ export class CaptureSightingPage implements OnDestroy  {
             carcass_utilization: ['10'],
             comments: ['']
         });
-        this.platform.ready().then(() => {
 
-            this.checkStatus();
-
-            this.watching = this.geolocation.watchPosition().subscribe(pos => {
-                this.hideBlocker();
-                this.lat = pos.coords.latitude;
-                this.lon = pos.coords.longitude;
-
-            },
-                () => this.dialogs.alert(
-                    'The app has been denied permission to use location but requires it to pin the sighting location.' +
-                    'The Settings page for the app will now open. Select \"Location\" and set it to \"While Using\"' +
-                    'then return to this app via the Home screen',
-                    'Location permission is required'
-                ).then(() => this.diagnostic.switchToSettings()));
-
-            this.manageStorage.getAllAvailableLionIds().then(result => {
-                result.forEach(element => {
-                    this.lionIdSelect.push(element.id);
-                });
+       
+        
+        this.manageStorage.getAllAvailableLionIds().then(result => {
+            result.forEach(element => {
+                this.lionIdSelect.push(element.id);
             });
-
-            // this.diagnostic.isLocationEnabled().then((res) => {
-            //     this.hideBlocker();
-            //     if (res === true) {
-            //         this.diagnostic.isLocationAuthorized().then(() => this.hideBlocker(), () => {
-            //             this.showBlockingPopover('You have not given us access to your location. '
-            //                 + 'Please authorize access as we require access to your location in order to pin the sighting.');
-            //         });
-            //     }
-            // }, () => {
-            //     this.showBlockingPopover('We see that your location service is off. '
-            //         + 'Please switch this on and try again. We require access to your location in order to pin the sighting.');
-            // });
         });
 
         this.platform.resume.subscribe(() => this.checkStatus());
     }
 
+    ngAfterViewInit() {
+
+        this.checkStatus();
+
+    }
+
+    getCurrentPosition() {
+        this.position = this.geolocation.getCurrentPosition({ timeout: 30000 }).then(pos => {
+            if(pos.coords) {
+                this.lat = pos.coords.latitude;
+                this.lon = pos.coords.longitude;
+            }   
+            
+        },
+            (err) => console.log(err));
+    }
+
+
     checkStatus() {
         this.diagnostic.getLocationAuthorizationStatus().then(status => {
-            this.hideBlocker();
+            // this.hideBlocker();
             switch (status) {
                 case this.diagnostic.permissionStatus.NOT_REQUESTED:
                     console.log('Permission not requested');
@@ -129,15 +120,31 @@ export class CaptureSightingPage implements OnDestroy  {
                     break;
                 case this.diagnostic.permissionStatus.DENIED:
                     console.log('Permission denied');
-                        this.dialogs.alert(
-                            'The app has been denied permission to use location but requires it to pin the sighting location.' +
-                            'The Settings page for the app will now open. Select \"Location\" and set it to \"While Using\"' +
-                            'then return to this app via the Home screen',
-                            'Location permission is required'
-                        ).then(() => this.diagnostic.switchToSettings());
+                    this.dialogs.alert(
+                        'The app has been denied permission to use location but requires it to pin the sighting location.' +
+                        'The Settings page for the app will now open. Select \"Location\" and set it to \"While Using\"' +
+                        'then return to this app via the Home screen',
+                        'Location permission is required'
+                    ).then(() => this.diagnostic.switchToSettings());
                     break;
                 case this.diagnostic.permissionStatus.GRANTED:
                     console.log('Permission granted always');
+                    if (!this.watching) {
+                        this.watching = this.geolocation.watchPosition({ timeout: 30000 }).subscribe(pos => {
+                            // this.hideBlocker();
+                            if(pos.coords) {
+                                this.lat = pos.coords.latitude;
+                                this.lon = pos.coords.longitude;
+                            }   
+                            
+                        },
+                            () => this.dialogs.alert(
+                                'The app has been denied permission to use location but requires it to pin the sighting location.' +
+                                'The Settings page for the app will now open. Select \"Location\" and set it to \"While Using\"' +
+                                'then return to this app via the Home screen',
+                                'Location permission is required'
+                            ).then(() => this.diagnostic.switchToSettings()));
+                    }                    
                     break;
             }
         }, this.showBlockingPopover);
@@ -150,7 +157,7 @@ export class CaptureSightingPage implements OnDestroy  {
                 'then return to this app via the Home screen',
                 'Opening Settings page'
             ).then(() => this.diagnostic.switchToSettings(),
-            () => this.checkStatus());
+                () => this.checkStatus());
         }
     }
 
@@ -252,10 +259,10 @@ export class CaptureSightingPage implements OnDestroy  {
             .then((data) => {
                 this.manageOrientation(data);
             });
-            this.camera.cleanup();
+        this.camera.cleanup();
     }
 
-    uploadMedia () {
+    uploadMedia() {
         this.presentLoading();
         const options = {
             quality: 100,
@@ -269,20 +276,20 @@ export class CaptureSightingPage implements OnDestroy  {
     }
 
     manageOrientation(data) {
-            const base64 = 'data:image/jpeg;base64,' + data;
+        const base64 = 'data:image/jpeg;base64,' + data;
 
-                // FIXING ORIENTATION USING NPM PLUGIN fix-orientation
-                fixOrientation(base64, { image: true }, (fixed: string, image: any) => {
-                    // fixed IS THE NEW VERSION FOR DISPLAY PURPOSES
-                    this.imgDisplay.push(fixed);
-                    const newPhoto: Photo = {
-                        name: '',
-                        file: fixed
-                    };
-                    this.photos.push(newPhoto);
-                    this.photoCounter++;
-                    this.dismisLoading();
-                });
+        // FIXING ORIENTATION USING NPM PLUGIN fix-orientation
+        fixOrientation(base64, { image: true }, (fixed: string, image: any) => {
+            // fixed IS THE NEW VERSION FOR DISPLAY PURPOSES
+            this.imgDisplay.push(fixed);
+            const newPhoto: Photo = {
+                name: '',
+                file: fixed
+            };
+            this.photos.push(newPhoto);
+            this.photoCounter++;
+            this.dismisLoading();
+        });
     }
 
     showCameraError() {
@@ -294,17 +301,17 @@ export class CaptureSightingPage implements OnDestroy  {
     }
 
     saveSighting() {
-        this.watching.unsubscribe();
+        // this.watching.unsubscribe();
         this.presentLoading();
         if (this.sightingForm.valid) {
             if (this.lat === 0 && this.lon === 0) {
                 this.checkStatus();
+                this.getCurrentPosition();
                 return;
             }
 
             let newSighting: Sighting;
             this.manageStorage.getNextSightingNumber().then(number => {
-
                 this.manageStorage.saveImages(this.photos, number).then(urls => {
 
                     this.photosUrls = urls;
@@ -346,21 +353,17 @@ export class CaptureSightingPage implements OnDestroy  {
 
     async presentLoading() {
         this.isLoading = true;
-        this.loading = await this.loadingCtrl.create().then(a => {
+        this.loading = await this.loadingCtrl.create().then(a =>
             a.present().then(() => {
                 if (!this.isLoading) {
-                    a.dismiss();
+                    this.loading.dismiss();
                 }
-            });
-        });
+            })
+        );
     }
 
     async dismisLoading() {
         this.isLoading = false;
         return await this.loadingCtrl.dismiss();
-    }
-
-    ngOnDestroy() {
-        this.platform.resume.unsubscribe();
     }
 }
