@@ -43,8 +43,6 @@ export class CaptureSightingPage implements AfterViewInit {
     photosUrls: string[] = [];
     lat = 0;
     lon = 0;
-    watching;
-    position;
     blockShown = false;
     popover;
 
@@ -81,8 +79,8 @@ export class CaptureSightingPage implements AfterViewInit {
             comments: ['']
         });
 
-       
-        
+
+
         this.manageStorage.getAllAvailableLionIds().then(result => {
             result.forEach(element => {
                 this.lionIdSelect.push(element.id);
@@ -98,15 +96,31 @@ export class CaptureSightingPage implements AfterViewInit {
 
     }
 
+    setLocation(coords) {
+        if (coords) {
+            this.lat = coords.latitude;
+            this.lon = coords.longitude;
+        }
+    }
+
     getCurrentPosition() {
-        this.position = this.geolocation.getCurrentPosition({ timeout: 30000 }).then(pos => {
-            if(pos.coords) {
-                this.lat = pos.coords.latitude;
-                this.lon = pos.coords.longitude;
-            }   
-            
+        this.geolocation.getCurrentPosition().then(pos => {
+            this.setLocation(pos.coords);
+
         },
             (err) => console.log(err));
+    }
+
+    watchPosition() {
+        this.geolocation.watchPosition().subscribe(pos => {
+            this.setLocation(pos.coords);
+        },
+            () => this.dialogs.alert(
+                'The app has been denied permission to use location but requires it to pin the sighting location.' +
+                'The Settings page for the app will now open. Select \"Location\" and set it to \"While Using\"' +
+                'then return to this app via the Home screen',
+                'Location permission is required'
+            ).then(() => this.diagnostic.switchToSettings()));
     }
 
 
@@ -129,22 +143,9 @@ export class CaptureSightingPage implements AfterViewInit {
                     break;
                 case this.diagnostic.permissionStatus.GRANTED:
                     console.log('Permission granted always');
-                    if (!this.watching) {
-                        this.watching = this.geolocation.watchPosition({ timeout: 30000 }).subscribe(pos => {
-                            // this.hideBlocker();
-                            if(pos.coords) {
-                                this.lat = pos.coords.latitude;
-                                this.lon = pos.coords.longitude;
-                            }   
-                            
-                        },
-                            () => this.dialogs.alert(
-                                'The app has been denied permission to use location but requires it to pin the sighting location.' +
-                                'The Settings page for the app will now open. Select \"Location\" and set it to \"While Using\"' +
-                                'then return to this app via the Home screen',
-                                'Location permission is required'
-                            ).then(() => this.diagnostic.switchToSettings()));
-                    }                    
+                    if (!this.lat) {
+                        this.watchPosition();
+                    }
                     break;
             }
         }, this.showBlockingPopover);
@@ -301,12 +302,15 @@ export class CaptureSightingPage implements AfterViewInit {
     }
 
     saveSighting() {
-        // this.watching.unsubscribe();
-        this.presentLoading();
+        this.watchPosition();
+
         if (this.sightingForm.valid) {
+            this.presentLoading();
+            if (this.lat === 0 && this.lon === 0) {
+                this.getCurrentPosition();
+            }
             if (this.lat === 0 && this.lon === 0) {
                 this.checkStatus();
-                this.getCurrentPosition();
                 return;
             }
 
