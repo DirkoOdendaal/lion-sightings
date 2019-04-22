@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import fixOrientation from 'fix-orientation';
+import { timeout } from 'rxjs/operators';
 /**
  * Generated class for the Landing page.
  *
@@ -79,7 +80,7 @@ export class CaptureSightingPage implements AfterViewInit {
             comments: ['']
         });
 
-
+        this.watchPosition();
 
         this.manageStorage.getAllAvailableLionIds().then(result => {
             result.forEach(element => {
@@ -302,13 +303,10 @@ export class CaptureSightingPage implements AfterViewInit {
     }
 
     saveSighting() {
-        this.watchPosition();
 
         if (this.sightingForm.valid) {
             this.presentLoading();
-            if (this.lat === 0 && this.lon === 0) {
-                this.getCurrentPosition();
-            }
+            this.getCurrentPosition();
             if (this.lat === 0 && this.lon === 0) {
                 this.checkStatus();
                 return;
