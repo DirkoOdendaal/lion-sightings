@@ -89,7 +89,8 @@ export class OfflineManagerService {
                 storedObj = [action];
             }
             // Save old & new local transactions back to Storage
-            return this.storage.set(STORAGE_REQ_KEY, JSON.stringify(storedObj));
+            this.storage.set(STORAGE_REQ_KEY, JSON.stringify(storedObj))
+            return 'unknown';
         });
     }
 

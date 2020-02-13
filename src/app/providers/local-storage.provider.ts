@@ -1,12 +1,11 @@
-
-
-
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
 
 const STORAGE_KEY = 'lion-sightings-key-859638453';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class LocalStorageProvider {
 
     constructor(public storage: Storage) { }

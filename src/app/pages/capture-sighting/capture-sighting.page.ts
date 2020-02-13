@@ -131,7 +131,7 @@ export class CaptureSightingPage implements AfterViewInit {
             switch (status) {
                 case this.diagnostic.permissionStatus.NOT_REQUESTED:
                     console.log('Permission not requested');
-                    this.diagnostic.requestLocationAuthorization().then(() => this.checkStatus(), this.showBlockingPopover);
+                    this.diagnostic.requestLocationAuthorization().then(() => this.checkStatus(), (err) => this.showBlockingPopover(err));
                     break;
                 case this.diagnostic.permissionStatus.DENIED:
                     console.log('Permission denied');
@@ -149,7 +149,7 @@ export class CaptureSightingPage implements AfterViewInit {
                     }
                     break;
             }
-        }, this.showBlockingPopover);
+        }, (err) => this.showBlockingPopover(err));
     }
 
     confirmCallback(i) {
@@ -164,14 +164,16 @@ export class CaptureSightingPage implements AfterViewInit {
     }
 
 
-    async showBlockingPopover(message) {
-        this.popover = await this.alertCtrl.create({
-            backdropDismiss: false,
-            keyboardClose: true,
-            header: 'Ohh snap!!',
-            message: message
-        });
-        return this.showBlocker(this.popover);
+    showBlockingPopover(message) {
+        if(this.platform.is('cordova')) {
+            this.popover = this.alertCtrl.create({
+                backdropDismiss: false,
+                keyboardClose: true,
+                header: 'Ohh snap!!',
+                message: message
+            });
+            this.showBlocker(this.popover);
+        }
     }
 
     async showBlocker(popover) {
@@ -341,10 +343,10 @@ export class CaptureSightingPage implements AfterViewInit {
                         activity: this.sightingForm.value.activity
                     };
                     this.manageStorage.addSighting(newSighting).then(result => {
-                        this.dismisLoading();
                         this.formValues.resetForm();
                         if (result) {
                             this.router.navigate(['/captured/', result]);
+                            this.dismisLoading();
                         }
                     });
                 });

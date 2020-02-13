@@ -19,7 +19,7 @@ export class ManageStorage {
     }
 
     updateUser(createUser: User) {
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             this.offlineManagerService.storeRequest('update_user', createUser);
         } else {
             this.database.updateUser(createUser);
@@ -27,7 +27,7 @@ export class ManageStorage {
     }
 
     userDetails() {
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             return from(this.localStorageProvider.getLocalData('user_details'));
         } else {
             return this.database.userDetails();
@@ -35,7 +35,7 @@ export class ManageStorage {
     }
 
     currentUser(): Observable<User> {
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             return from(this.localStorageProvider.getLocalData('current_user'));
         } else {
             return this.database.currentUser();
@@ -43,7 +43,7 @@ export class ManageStorage {
     }
 
     getUserDetails() {
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             return Promise.resolve(this.localStorageProvider.getLocalData('get_user_details'));
         } else {
             return Promise.resolve(this.database.getUserDetails());
@@ -51,7 +51,7 @@ export class ManageStorage {
     }
 
     getAllUsers(): Promise<any> {
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             return Promise.resolve(this.localStorageProvider.getLocalData('get_all_users'));
         } else {
             return this.database.getAllUsers();
@@ -59,7 +59,7 @@ export class ManageStorage {
     }
 
     getNextSightingNumber() {
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             const previousValue = this.localStorageProvider.getLocalData('next_sighting').then(val => val + 1);
             this.localStorageProvider.setLocalData('next_sighting', previousValue);
             return Promise.resolve(this.localStorageProvider.getLocalData('next_sighting'));
@@ -69,7 +69,7 @@ export class ManageStorage {
     }
 
     addSighting(sighting: Sighting) {
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             return Promise.resolve(this.offlineManagerService.storeRequest('sightings', sighting));
         } else {
             return this.database.addSighting(sighting);
@@ -77,7 +77,7 @@ export class ManageStorage {
     }
 
     getSightingsForAllUsers(): Promise<any> {
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             return Promise.resolve(this.localStorageProvider.getLocalData('all_sightings'));
         } else {
             return this.database.getSightingsForAllUsers();
@@ -86,7 +86,7 @@ export class ManageStorage {
 
     getSightingsForUser(): Promise<any> {
         const list = [];
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             return Promise.resolve(this.localStorageProvider.getLocalData('user_sightings'));
         } else {
             return this.database.getSightingsForUser();
@@ -94,7 +94,7 @@ export class ManageStorage {
     }
 
     getSightingById(id: number): Promise<any> {
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             return this.localStorageProvider.getLocalData('user_sightings').then(list => {
                 return list.find(x => x.sighting_number === id);
             });
@@ -104,7 +104,7 @@ export class ManageStorage {
     }
 
     addId(lionId: LionId): Promise<any> {
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             return Promise.resolve(this.offlineManagerService.storeRequest('add_id', lionId));
         } else {
             return this.database.addId(lionId);
@@ -112,7 +112,7 @@ export class ManageStorage {
     }
 
     updateId(lionId: LionId) {
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             return Promise.resolve(this.offlineManagerService.storeRequest('update_id', lionId));
         } else {
             return this.database.updateId(lionId);
@@ -120,7 +120,7 @@ export class ManageStorage {
     }
 
     getLionIdById(id: string): Promise<any> {
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             return this.localStorageProvider.getLocalData('all_lion_ids').then(list => {
                 return list.find(x => x.id === id);
             });
@@ -130,7 +130,7 @@ export class ManageStorage {
     }
 
     getAllLionIds(): Promise<any> {
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             return this.localStorageProvider.getLocalData('all_lion_ids');
         } else {
             return this.database.getAllLionIds();
@@ -138,18 +138,18 @@ export class ManageStorage {
     }
 
     getAllAvailableLionIds(): Promise<any> {
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             return this.localStorageProvider.getLocalData('all_available_ids');
         } else {
             return this.database.getAllAvailableLionIds();
         }
     }
 
-    saveImages(photos: Photo[], sightingNumber): Promise<any> {
+    async saveImages(photos: Photo[], sightingNumber): Promise<any> {
         const list = [];
         const promiseList = [];
 
-        if (this.networkService.getCurrentNetworkStatus() === ConnectionStatus.Offline) {
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
             const savedPhoto: SavedImage = {
                 sightingNumber: sightingNumber,
                 photos: photos
@@ -162,7 +162,8 @@ export class ManageStorage {
                 }));
             });
         }
-        return Promise.all(promiseList).then(() => Promise.resolve(list));
+        await Promise.all(promiseList);
+        return await Promise.resolve(list);
     }
 
     saveImage(photo: Photo, index, sightingNumber): Promise<any> {

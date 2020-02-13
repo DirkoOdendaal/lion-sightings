@@ -15,6 +15,7 @@ import { SwUpdate } from '@angular/service-worker';
 
 import { NetworkService, ConnectionStatus } from './services/network.service';
 import { OfflineManagerService } from './services/offline-manager.service';
+import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 
 @Component({
   selector: 'app-root',
@@ -112,14 +113,23 @@ export class AppComponent implements OnInit {
     }
 
     // Check if app back online and do updates to DB
-    this.networkService.onNetworkChange().subscribe((status: ConnectionStatus) => {
-      if (status === ConnectionStatus.Online) {
-        this.database.getCurrentSightingNumber();
-        this.database.getAllLionIds();
-        this.offlineManagerService.checkForEvents().subscribe();
-        this.offlineManagerService.checkForImageEvents().subscribe();
-      }
-    });
+    this.networkService
+            .getNetworkStatus()
+            .pipe(debounceTime(300))
+            .subscribe((connected: boolean) => {
+              if (connected) {
+                this.database.getCurrentSightingNumber();
+                this.database.getAllLionIds();
+                this.offlineManagerService.checkForEvents().subscribe();
+                this.offlineManagerService.checkForImageEvents().subscribe();
+              }
+              const toast = this.toastController.create({
+                message: `You are now ${connected ? 'online' : 'offline'}`,
+                duration: 3000,
+                position: 'bottom'
+            });
+            toast.then(val => val.present());
+            });
 
   }
 

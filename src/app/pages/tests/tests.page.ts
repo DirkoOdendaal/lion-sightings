@@ -6,6 +6,8 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { Crop } from '@ionic-native/crop/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
+import fixOrientation from 'fix-orientation';
+import { Photo } from 'src/app/models/photo.model';
 
 @Component({
     selector: 'page-tests',
@@ -17,6 +19,9 @@ export class TestsPage {
     isLoading = true;
     blockShown = false;
     popover;
+    imgDisplay = [];
+    photos: Photo[] = [];
+    photoCounter = 1;
 
     constructor(private database: Database,
         private platform: Platform,
@@ -78,19 +83,16 @@ export class TestsPage {
         this.presentLoading();
         this.database.setValue()
             .then(val => {
-                this.dismisLoading();
-                this.showSuccessAlert('test1', 'This works');
+                this.showSuccessAlert('test1', `This works ${val}`);
             }).catch(err => {
-                this.dismisLoading();
                 this.showErrorAlert('test1', err);
-            });
+            }).finally;
     }
 
     test2() {
         this.presentLoading();
         this.geolocation.getCurrentPosition()
             .then(val => {
-                this.dismisLoading();
                 this.showSuccessAlert('test2', val.coords.latitude.toString() + ' ' + val.coords.longitude.toString());
             },
              () =>this.dialogs.confirm(
@@ -102,9 +104,6 @@ export class TestsPage {
                 ]).then((val) => this.confirmCallback(val))
                 )
             .catch(err => {
-                this.dismisLoading();
-                console.log(err);
-                console.log(err.code);
                 this.showErrorAlert('test2', err.message);
             });
     }
@@ -114,41 +113,46 @@ export class TestsPage {
     }
 
     test4() {
-        const options = {
-            quality: 100,
-            correctOrientation: true,
-            saveToPhotoAlbum: true,
-            allowEdit: true,
-            mediaType: this.camera.MediaType.PICTURE
-        };
-        this.camera.getPicture(options)
-            .then((data) => {
-                this.cropService
-                    .crop(data, { quality: 75 })
-                    .then((newImage) => {
-                        console.log(newImage);
-                    });
-            });
+            const options = {
+                quality: 100,
+                destinationType: this.camera.DestinationType.DATA_URL,
+                encodingType: this.camera.EncodingType.JPEG,
+                sourceType: this.camera.PictureSourceType.CAMERA,
+                mediaType: this.camera.MediaType.PICTURE
+            };
+            this.camera.getPicture(options)
+                .then((data) => {
+                    this.manageOrientation(data);
+                });
+            this.camera.cleanup();
     }
 
     test5() {
         const options = {
             quality: 100,
-            correctOrientation: true,
-            saveToPhotoAlbum: true,
-            allowEdit: true,
-            mediaType: this.camera.MediaType.ALLMEDIA,
+            destinationType: this.camera.DestinationType.DATA_URL,
             sourceType: this.camera.PictureSourceType.PHOTOLIBRARY
         };
         this.camera.getPicture(options)
             .then((data) => {
-                this.cropService
-                    .crop(data, { quality: 75 })
-                    .then((newImage) => {
-                        console.log(newImage);
-                    },
-                    () => this.showCameraError());
-            });
+                this.manageOrientation(data);
+            }, this.showCameraError);
+    }
+
+    manageOrientation(data) {
+        const base64 = 'data:image/jpeg;base64,' + data;
+
+        // FIXING ORIENTATION USING NPM PLUGIN fix-orientation
+        fixOrientation(base64, { image: true }, (fixed: string, image: any) => {
+            // fixed IS THE NEW VERSION FOR DISPLAY PURPOSES
+            this.imgDisplay.push(fixed);
+            const newPhoto: Photo = {
+                name: '',
+                file: fixed
+            };
+            this.photos.push(newPhoto);
+            this.photoCounter++;
+        });
     }
 
     showCameraError() {
@@ -223,10 +227,5 @@ export class TestsPage {
                 }
             });
         });
-    }
-
-    async dismisLoading() {
-        this.isLoading = false;
-        return await this.loadingController.dismiss();
     }
 }

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Network } from '@ionic-native/network/ngx';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { ToastController, Platform } from '@ionic/angular';
+import { BehaviorSubject, fromEvent, merge, of, Observable } from 'rxjs';
+import { mapTo } from 'rxjs/operators';
 
 export enum ConnectionStatus {
     Online,
@@ -13,31 +14,71 @@ export enum ConnectionStatus {
 })
 export class NetworkService {
 
-    private status: BehaviorSubject<ConnectionStatus> = new BehaviorSubject(ConnectionStatus.Offline);
+    private online$: Observable<boolean> = undefined;
+    private status: BehaviorSubject<ConnectionStatus> = new BehaviorSubject(ConnectionStatus.Online);
 
-    constructor(private network: Network, private toastController: ToastController, private plt: Platform) {
-        this.plt.ready().then(() => {
-            this.initializeNetworkEvents();
-            const status = this.network.type !== 'none' ? ConnectionStatus.Online : ConnectionStatus.Offline;
-            this.status.next(status);
-        });
+    constructor(public network: Network, public platform: Platform, private toastController: ToastController) {
+        this.online$ = Observable.create(observer => {
+            observer.next(true);
+        }).pipe(mapTo(true));
+
+        if (this.platform.is('cordova')) {
+            // on Device
+            this.online$ = merge(
+                this.network.onConnect().pipe(mapTo(true)),
+                this.network.onDisconnect().pipe(mapTo(false))
+            );
+            this.network.onDisconnect().subscribe(() => {
+                if (this.status.getValue() === ConnectionStatus.Online) {
+                    this.updateNetworkStatus(ConnectionStatus.Offline);
+                }
+            });
+
+            this.network.onConnect().subscribe(() => {
+                if (this.status.getValue() === ConnectionStatus.Offline) {
+                    this.updateNetworkStatus(ConnectionStatus.Online);
+                }
+            });
+        } else {
+            // on Browser
+            this.online$ = merge(
+                of(navigator.onLine),
+                fromEvent(window, 'online').pipe(mapTo(true)),
+                fromEvent(window, 'offline').pipe(mapTo(false))
+            );
+            fromEvent(window, 'online').subscribe(() => {
+                if (this.status.getValue() === ConnectionStatus.Online) {
+                    this.updateNetworkStatus(ConnectionStatus.Offline);
+                }
+            });
+
+            fromEvent(window, 'offline').subscribe(() => {
+                if (this.status.getValue() === ConnectionStatus.Offline) {
+                    this.updateNetworkStatus(ConnectionStatus.Online);
+                }
+            });
+        }
     }
+
+    public getNetworkType(): string {
+        return this.network.type;
+    }
+
+    public getNetworkStatus(): Observable<boolean> {
+        return this.online$;
+    }
+
+    // constructor(private network: Network, private toastController: ToastController, private plt: Platform) {
+    //     this.plt.ready().then(() => {
+    //         this.initializeNetworkEvents();
+    //         const status = this.network.type !== 'none' ? ConnectionStatus.Online : ConnectionStatus.Offline;
+    //         this.status.next(status);
+    //     });
+    // }
 
     public initializeNetworkEvents() {
 
-        this.network.onDisconnect().subscribe(() => {
-            if (this.status.getValue() === ConnectionStatus.Online) {
-                // console.log('WE ARE OFFLINE');
-                this.updateNetworkStatus(ConnectionStatus.Offline);
-            }
-        });
-
-        this.network.onConnect().subscribe(() => {
-            if (this.status.getValue() === ConnectionStatus.Offline) {
-                // console.log('WE ARE ONLINE');
-                this.updateNetworkStatus(ConnectionStatus.Online);
-            }
-        });
+        
     }
 
     private async updateNetworkStatus(status: ConnectionStatus) {
