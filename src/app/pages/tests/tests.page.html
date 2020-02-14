@@ -11,8 +11,12 @@
 
 <ion-content padding>
 
-    <ion-button expand="block" type="button" (click)="test1()">
-        Test 1
+    <ion-button expand="block" type="button" (click)="test1Online()">
+        Test 1 - Online
+    </ion-button>
+
+    <ion-button expand="block" type="button" (click)="test1Offline()">
+        Test 1 - Offline
     </ion-button>
 
     <ion-button expand="block" type="button" (click)="test2()">
@@ -30,5 +34,15 @@
     <ion-button expand="block" type="button" (click)="test5()">
         Test 5
     </ion-button>
+
+    <ion-grid>
+        <ion-row>
+            <ion-col col-3 col-md-3 col-xl-3 *ngFor="let photo of imgDisplay">
+                <ion-thumbnail>
+                    <img [src]="domSanitizer.bypassSecurityTrustUrl(photo)" alt="Sighting photos"/>
+                </ion-thumbnail>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 
 </ion-content>

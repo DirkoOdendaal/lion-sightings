@@ -169,4 +169,13 @@ export class ManageStorage {
     saveImage(photo: Photo, index, sightingNumber): Promise<any> {
         return this.storageProvider.saveImage(photo, index, sightingNumber);
     }
+
+    setValue() {
+
+        if (this.networkService.getCurrentNetworkStatus() === 0) {
+            return Promise.resolve(this.offlineManagerService.storeRequest('setValue', "Test"));
+        } else {
+            return this.database.setValue();
+        }
+    }
 }

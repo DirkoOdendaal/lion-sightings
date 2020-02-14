@@ -8,6 +8,7 @@ import { Crop } from '@ionic-native/crop/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import fixOrientation from 'fix-orientation';
 import { Photo } from 'src/app/models/photo.model';
+import { ManageStorage } from 'src/app/providers/manage-storage.provider';
 
 @Component({
     selector: 'page-tests',
@@ -31,6 +32,7 @@ export class TestsPage {
         private diagnostic: Diagnostic,
         private dialogs: Dialogs,
         public cropService: Crop,
+        public manageStorage: ManageStorage,
         public camera: Camera) {
 
         this.platform.ready().then(() => {
@@ -79,14 +81,28 @@ export class TestsPage {
         }
     }
 
-    test1() {
+    test1Online() {
         this.presentLoading();
         this.database.setValue()
             .then(val => {
-                this.showSuccessAlert('test1', `This works ${val}`);
+                this.showSuccessAlert('test1Online', `This works ${val}`);
+                this.dismisLoading();
             }).catch(err => {
-                this.showErrorAlert('test1', err);
-            }).finally;
+                this.showErrorAlert('test1Online', err);
+                this.dismisLoading();
+            });
+    }
+
+    test1Offline() {
+        this.presentLoading();
+        this.manageStorage.setValue()
+            .then(val => {
+                this.showSuccessAlert('test1Offline', `This works ${val}`);
+                this.dismisLoading();
+            }).catch(err => {
+                this.showErrorAlert('test1Offline', err);
+                this.dismisLoading();
+            });
     }
 
     test2() {
@@ -94,6 +110,7 @@ export class TestsPage {
         this.geolocation.getCurrentPosition()
             .then(val => {
                 this.showSuccessAlert('test2', val.coords.latitude.toString() + ' ' + val.coords.longitude.toString());
+                this.dismisLoading();
             },
              () =>this.dialogs.confirm(
                 'The app has been denied permission to use location but requires it to pin the sighting location.' +
@@ -105,6 +122,7 @@ export class TestsPage {
                 )
             .catch(err => {
                 this.showErrorAlert('test2', err.message);
+                this.dismisLoading();
             });
     }
 
@@ -227,5 +245,10 @@ export class TestsPage {
                 }
             });
         });
+    }
+
+    async dismisLoading() {
+        this.isLoading = false;
+        return await this.loadingController.dismiss();
     }
 }
