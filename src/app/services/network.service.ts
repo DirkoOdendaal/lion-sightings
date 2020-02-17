@@ -22,19 +22,20 @@ export class NetworkService {
             observer.next(true);
         }).pipe(mapTo(true));
 
+        this.platform.ready().then(() => {
         if (this.platform.is('cordova')) {
             // on Device
             this.online$ = merge(
                 this.network.onConnect().pipe(mapTo(true)),
                 this.network.onDisconnect().pipe(mapTo(false))
             );
-            this.network.onDisconnect().subscribe(() => {
+            this.network.onDisconnect().subscribe(async() => {
                 if (this.status.getValue() === ConnectionStatus.Online) {
                     this.updateNetworkStatus(ConnectionStatus.Offline);
                 }
             });
 
-            this.network.onConnect().subscribe(() => {
+            this.network.onConnect().subscribe(async() => {
                 if (this.status.getValue() === ConnectionStatus.Offline) {
                     this.updateNetworkStatus(ConnectionStatus.Online);
                 }
@@ -58,6 +59,7 @@ export class NetworkService {
                 }
             });
         }
+    });
     }
 
     public getNetworkType(): string {
@@ -75,11 +77,6 @@ export class NetworkService {
     //         this.status.next(status);
     //     });
     // }
-
-    public initializeNetworkEvents() {
-
-        
-    }
 
     private async updateNetworkStatus(status: ConnectionStatus) {
         this.status.next(status);

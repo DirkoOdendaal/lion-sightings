@@ -21,7 +21,8 @@ sendRequests(operations: StoredRequest[]) {
         if (op.type === 'update_user') {
             oneObs = this.database.updateUser(op.data);
         } else if (op.type === 'sightings') {
-            oneObs = this.database.addSighting(op.data);
+            console.log('adding offline sighting');
+            oneObs = this.database.addNextSighting(op.data);
         } else if (op.type === 'add_id') {
             oneObs = this.database.addId(op.data);
         } else if (op.type === 'update_id') {

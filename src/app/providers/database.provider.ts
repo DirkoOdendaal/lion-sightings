@@ -23,7 +23,7 @@ export class Database {
     }
 
     updateUser(createUser: User) {
-        this.db.collection('users').doc(createUser.user_id).set({
+        return this.db.collection('users').doc(createUser.user_id).set({
             user_id: createUser.user_id,
             firstname: createUser.firstname,
             surname: createUser.surname,
@@ -149,6 +149,43 @@ export class Database {
         });
     }
 
+    addNextSighting(sighting: Sighting) {
+        const nextSighting = this.db.collection('sightings').ref.get()
+            .then(snapshot => {
+                return this.db.collection('sightings').doc((snapshot.size + 1).toString()).set({
+                    sighting_number: sighting.sighting_number,
+                    user: this.db.firestore.app.auth().currentUser.uid,
+                    date_time: new Date().toString(),
+                    temperature: sighting.temperature,
+                    adult_male: sighting.adult_male,
+                    adult_female: sighting.adult_female,
+                    sub_adult_male: sighting.sub_adult_male,
+                    sub_adult_female: sighting.sub_adult_female,
+                    cub_male: sighting.cub_male,
+                    cub_female: sighting.cub_female,
+                    cub_unknown: sighting.cub_unknown,
+                    lion_id_list: sighting.lion_id_list,
+                    latitude: sighting.latitude,
+                    longitude: sighting.longitude,
+                    activity: sighting.activity,
+                    catch: sighting.catch,
+                    catch_species: sighting.catch_species,
+                    catch_gender: sighting.catch_gender,
+                    catch_age: sighting.catch_age,
+                    carcass_utilization: sighting.carcass_utilization,
+                    comments: sighting.comments,
+                    photos: sighting.photos
+                }).then(pass => {
+                    return sighting.sighting_number.toString();
+                });
+            })
+            .catch(err => {
+                return Promise.resolve(1);
+            });
+        nextSighting.then(val => this.localStorageProvider.setLocalData('next_sighting', val));
+        return nextSighting;
+    }
+
     updateSighting(sighting: Sighting) {
         return this.db.collection('sightings').doc(sighting.sighting_number.toString()).set({
             sighting_number: sighting.sighting_number,
@@ -224,7 +261,7 @@ export class Database {
     }
 
     updateId(lionId: LionId) {
-        this.db.collection('ids').doc(lionId.id).set({
+        return this.db.collection('ids').doc(lionId.id).set({
             id: lionId.id,
             sold: lionId.sold,
             died: lionId.died,
