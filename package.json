@@ -14,7 +14,7 @@
     "publish": "firebase deploy",
     "build-android": "cordova build --release android",
     "android-sign": "jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore lionsightingssign.keystore .\\platforms\\android\\app\\build\\outputs\\apk\\release\\app-release-unsigned.apk lionsightingssign",
-    "android-optimize": "C:\\Android\\SDK\\build-tools\\27.0.3\\zipalign -v 4 C:\\Repositories\\Personal\\lion-sightings\\platforms\\android\\app\\build\\outputs\\apk\\release\\app-release-unsigned.apk lionsightings.apk",
+    "android-optimize": "C:\\Android\\SDK\\build-tools\\28.0.3\\zipalign -v 4 C:\\Repositories\\Personal\\lion-sightings\\platforms\\android\\app\\build\\outputs\\apk\\release\\app-release-unsigned.apk lionsightings.apk",
     "android-emulate": "ionic cordova emulate android --prod --release -- -- --keystore=lionsightingssign.keystore --storePassword=Dirko1234 --alias=lionsightingssign --password=Dirko1234"
   },
   "private": true,
